@@ -7,11 +7,9 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script>
 
-
+// drawing map on svg
 var width = 960
     height = 1160
-
-var infobox = d3.select("body").append("p").attr("id","infobox")
 
 var svg = d3.select("body").append("svg")
     .attr("width", width)
@@ -23,49 +21,89 @@ var projection = d3.geo.mercator()
 
 var path = d3.geo.path().projection(projection)
 
-// stuff like map color schemes for each dataset
+
+// presentation metadata (e.g. map color schemes) for each dataset
 var data_configs = {
+                    /*
+                    'example': {
+                                'property_name' : {string} key to look up json data 
+                                'button_name'   : {string} how to present the toggle switch
+                                'domain_type'   : {string} ordinal or quantize
+                                'scale_range'   : {array} the range of values (ordinal: array, quantize: min/max)
+                                'color_palette' : {array} from colorbrewer 
+                               }
+                    ,
+                    */
                     'default': {
-                                'property_name' : null,
+                                'property_name' : 'default',
+                                'button_name'   : null,
+                                'domain_type'   : null,
                                 'scale_range'   : null,
-                               },
-
+                                'color_palette' : null,
+                               }
+                    ,
                     'race'   : {
-                                'property_name' : null,
-                                'scale_range'   : null,
-                               },
-
+                                'properties'    : 'racial_majority',
+                                'button_name'   : 'Racial majority',
+                                'domain_type'   : 'ordinal',
+                                'scale_range'   : ['Black','White','Hispanic','Mixed'],
+                                'color_palette' : ['#a6cee3','#1f78b4', '#b2df8a', '#33a02c']
+                               }
+                    ,
                     'hs'     : {
-                                'property_name' : null,
-                                'scale_range'   : null,
+                                'properties'    : 'racial_majority',
+                                'button_name'   : 'No college',
+                                'domain_type'   : 'quantize',
+                                'scale_range'   : null, // min/max
+                                'color_palette' : ["rgb(237,248,233)", "rgb(186,228,179)","rgb(116,196,118)", "rgb(49,163,84)","rgb(0,109,44)"],
                                }
 }
 
 
-
-
-
-//var ca_data = d3.json("viz_data/data.geojson", function(json) { return json.features })
-
 var map = d3.json("viz_data/data.geojson", function(json) {
+    // get data and shapes
     var comm_areas = json.features
+  
+    // TODO: figure out how to handle defaults 
+    config = null
     
+    // load switches and click events from var data_configs
+    for (config_name in data_configs) {
+        if (config_name != 'default') {
+            this_config = data_configs[config_name]
+            button_name = this_config['button_name']
+            // instantiate the toggle switches
+            d3.select("body").append("p").attr("id",this_config['properties']).html(button_name)
+            // add onclicks, set global config
+            .on("click",function(this_config) { config = this_config; })
+        }
+    }    
     
-    var color = d3.scale.quantize()
-                .range(["rgb(237,248,233)", "rgb(186,228,179)",
-                 "rgb(116,196,118)", "rgb(49,163,84)","rgb(0,109,44)"]);
+    // handle ordinal (text) vs quantize (numerical) choropleths 
+    if (! config) {
+        // but first check if we have a dataset selected
+        // ... and if not, pass
+    } else {
+        if (config['domain_type'] == 'ordinal') {
+            var color = d3.scale.ordinal()
+            color.domain([config['scale_range']])
+        } else {
+            try {
+                var color = d3.scale.quantize()
+                min = d3.min(function(d) {d.properties.getAttribute(config['property_name'])}) 
+                max = d3.max(function(d) {d.properties.getAttribute(config['property_name'])}) 
+                color.domain([min,max])
+            } catch(err) {
+                console.log(err)
+            }
+        }
 
-    
-    var dom = color.domain([
-              d3.min(comm_areas, function(d) { return d.properties.hs_diploma_or_less; }),
-              d3.max(comm_areas, function(d) { return d.properties.hs_diploma_or_less; })
-    ]);
+    // add colors
+    color.range(config['color_palette'])
+    }
 
-
-    var bar = svg.selectAll(".cas").attr("fill", function(d) { return color(d.properties.hs_diploma_or_less) } )
-
-    var clicky = d3.select("body").append("div").attr("id","clicker").html("clicky click").on("click", function(d) {
-    svg.selectAll(".cas").attr("fill", function(d) { return color(d.properties.hs_diploma_or_less) } );
+    var clicky = d3.select("body").append("div").attr("id","clicker").html("clicky click").on("click", function(comm_areas) {
+    svg.selectAll(".cas").attr("fill", function(d) { return color(d.properties.racial_majority) } );
     console.log(foo)
     })
 
@@ -76,58 +114,7 @@ var map = d3.json("viz_data/data.geojson", function(json) {
     .attr("d",path)
     .attr("class","cas")
     .attr("fill","#CCCCCC")
-
-    return foo;
-
-
+    
 })
-
-
-var colors = {
-              1: ['rgb(237,248,251)','rgb(179,205,227)','rgb(140,150,198)','rgb(136,86,167)','rgb(129,15,124)'],
-              2: ["rgb(237,248,233)", "rgb(186,228,179)", "rgb(116,196,118)", "rgb(49,163,84)","rgb(0,109,44)"]
-             }
-
-
-
-var colorize = function(color_no) {
-    d3.select("svg").data(comm_areas).update().append("path").attr("d","path").attr("fill",'#FF0000')
-}
-
-var fill = svg.selectAll("path")
-
-
-
-
-/*
-color.domain([
-              d3.min(comm_areas, function(d) { return d.properties.hs_diploma_or_less; }),
-              d3.max(comm_areas, function(d) { return d.properties.hs_diploma_or_less; })
-]);
-
-svg.selectAll("path")
-    .data(comm_areas)
-    .enter()
-    .append("path")
-    .attr("d",path)
-    .attr("fill",function(d) {
-        return color(d.properties.hs_diploma_or_less)
-        }
-    )
-    .on("click", function(d) {
-        d3.select("p#infobox").html(function() {
-            return d.properties.community + "<br />" + d.properties.hs_diploma_or_less
-        }
-        ) 
-    })
-})
-;
-*/
-
-
-var recolor = function(scheme) {
-    new_color = colors[scheme]
-}
 
 </script>
-
