@@ -23,6 +23,20 @@ var path = d3.geo.path().projection(projection)
 
 var default_color = '#CCCCCC'
 
+
+
+// testing how to make a map color key
+var test_key_group = d3.select("svg").append("g").attr("id","test_key")
+var test_key_text  = test_key_group.append("text").text("test")
+test_key_text.attr({
+        id : 'test_key_text',
+        x  : 200,
+        y  : 200,
+        })
+
+
+
+
 // presentation metadata (e.g. map color schemes) for each dataset
 var data_configs = {
                     /*
@@ -63,7 +77,7 @@ var data_configs = {
 
 var map = d3.json("viz_data/data.geojson", function(json) {
     // get data and shapes
-    var comm_areas = json.features
+    comm_areas = json.features
   
     // TODO: figure out how to handle default configs 
     config = null
@@ -73,7 +87,7 @@ var map = d3.json("viz_data/data.geojson", function(json) {
     .data(comm_areas)
     .enter()
     .append("path")
-    .attr("d",path)
+    //.attr("d",path)
     .attr("class","cas")
     .attr("fill", default_color)
  
@@ -113,14 +127,16 @@ var map = d3.json("viz_data/data.geojson", function(json) {
                     } else {
                         try {
                             color = d3.scale.quantize()
-                            color.domain(0,1)
+                            color.domain([0,1])
+                            console.log(this.id)
+                            debugger;
                         } catch(err) {
                             console.log(err)
                         }
                     }
                 // add colors
                 color.range(config['color_palette'])
-                svg.selectAll(".cas").attr("fill", function(d) { debugger; return color(d.properties[config.properties]) })
+                svg.selectAll(".cas").attr("fill", function(d) {  return color(d.properties[config.properties]) })
                 }
             })
 
