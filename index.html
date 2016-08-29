@@ -9,7 +9,7 @@
 
 // drawing map on svg
 var width = 960
-    height = 1160
+    height = 700
 
 var svg = d3.select("body").append("svg")
     .attr("width", width)
@@ -21,12 +21,13 @@ var projection = d3.geo.mercator()
 
 var path = d3.geo.path().projection(projection)
 
+var default_color = '#CCCCCC'
 
 // presentation metadata (e.g. map color schemes) for each dataset
 var data_configs = {
                     /*
                     'example': {
-                                'property_name' : {string} key to look up json data 
+                                'properties'    : {string} key to look up json data 
                                 'button_name'   : {string} how to present the toggle switch
                                 'domain_type'   : {string} ordinal or quantize
                                 'scale_range'   : {array} the range of values (ordinal: array, quantize: min/max)
@@ -35,7 +36,7 @@ var data_configs = {
                     ,
                     */
                     'default': {
-                                'property_name' : 'default',
+                                'properties'    : 'default',
                                 'button_name'   : null,
                                 'domain_type'   : null,
                                 'scale_range'   : null,
@@ -51,7 +52,7 @@ var data_configs = {
                                }
                     ,
                     'hs'     : {
-                                'properties'    : 'racial_majority',
+                                'properties'    : 'hs_diploma_or_less',
                                 'button_name'   : 'No college',
                                 'domain_type'   : 'quantize',
                                 'scale_range'   : null, // min/max
@@ -64,57 +65,77 @@ var map = d3.json("viz_data/data.geojson", function(json) {
     // get data and shapes
     var comm_areas = json.features
   
-    // TODO: figure out how to handle defaults 
+    // TODO: figure out how to handle default configs 
     config = null
     
-    // load switches and click events from var data_configs
-    for (config_name in data_configs) {
-        if (config_name != 'default') {
-            this_config = data_configs[config_name]
-            button_name = this_config['button_name']
-            // instantiate the toggle switches
-            d3.select("body").append("p").attr("id",this_config['properties']).html(button_name)
-            // add onclicks, set global config
-            .on("click",function(this_config) { config = this_config; })
-        }
-    }    
-    
-    // handle ordinal (text) vs quantize (numerical) choropleths 
-    if (! config) {
-        // but first check if we have a dataset selected
-        // ... and if not, pass
-    } else {
-        if (config['domain_type'] == 'ordinal') {
-            var color = d3.scale.ordinal()
-            color.domain([config['scale_range']])
-        } else {
-            try {
-                var color = d3.scale.quantize()
-                min = d3.min(function(d) {d.properties.getAttribute(config['property_name'])}) 
-                max = d3.max(function(d) {d.properties.getAttribute(config['property_name'])}) 
-                color.domain([min,max])
-            } catch(err) {
-                console.log(err)
-            }
-        }
-
-    // add colors
-    color.range(config['color_palette'])
-    }
-
-    var clicky = d3.select("body").append("div").attr("id","clicker").html("clicky click").on("click", function(comm_areas) {
-    svg.selectAll(".cas").attr("fill", function(d) { return color(d.properties.racial_majority) } );
-    console.log(foo)
-    })
-
-    var foo = svg.selectAll("path")
+    // default map
+    svg.selectAll("path")
     .data(comm_areas)
     .enter()
     .append("path")
     .attr("d",path)
     .attr("class","cas")
-    .attr("fill","#CCCCCC")
+    .attr("fill", default_color)
+ 
     
+    // load switches and click events from var data_configs
+    for (config_name in data_configs) {
+        if (config_name != 'default') {
+            var this_config = data_configs[config_name]
+            button_name = this_config['button_name']
+            // instantiate the toggle switches
+            d3.select("body").append("p").attr("id",config_name).html(button_name)
+            // add onclicks, set global config
+            
+
+
+
+
+
+
+
+
+
+
+
+
+            
+            .on("click",function() { 
+                config = data_configs[this.id]
+                // handle ordinal (text) vs quantize (numerical) choropleths 
+                if (! config) {
+                    // but first check if we have a dataset selected
+                    // ... and if not, pass
+                } else {
+                    if (config['domain_type'] == 'ordinal') {
+                        color = d3.scale.ordinal()
+                        color.domain([config['scale_range']])
+                    } else {
+                        try {
+                            color = d3.scale.quantize()
+                            color.domain(0,1)
+                        } catch(err) {
+                            console.log(err)
+                        }
+                    }
+                // add colors
+                color.range(config['color_palette'])
+                svg.selectAll(".cas").attr("fill", function(d) { debugger; return color(d.properties[config.properties]) })
+                }
+            })
+
+
+
+
+
+
+
+
+
+        }
+    }    
+    
+  
 })
 
 </script>
