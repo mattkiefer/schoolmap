@@ -33,7 +33,14 @@ test_key_text.attr({
         x  : 200,
         y  : 200,
         })
-
+var test_key_rect = test_key_group.append("rect")
+test_key_rect.attr({
+        fill  : "#00FF00",
+        x      : 200,
+        y      : 250,
+        width  : 100,
+        height : 100,
+        })
 
 
 
@@ -87,7 +94,7 @@ var map = d3.json("viz_data/data.geojson", function(json) {
     .data(comm_areas)
     .enter()
     .append("path")
-    //.attr("d",path)
+    .attr("d",path)
     .attr("class","cas")
     .attr("fill", default_color)
  
@@ -127,15 +134,16 @@ var map = d3.json("viz_data/data.geojson", function(json) {
                     } else {
                         try {
                             color = d3.scale.quantize()
-                            color.domain([0,1])
-                            console.log(this.id)
-                            debugger;
+                            min = d3.min(comm_areas, function(ca) {return ca.properties[config.properties]})
+                            max = d3.max(comm_areas, function(ca) {return ca.properties[config.properties]})
+                            color.domain([min, max])
                         } catch(err) {
                             console.log(err)
                         }
                     }
                 // add colors
                 color.range(config['color_palette'])
+                debugger;
                 svg.selectAll(".cas").attr("fill", function(d) {  return color(d.properties[config.properties]) })
                 }
             })
