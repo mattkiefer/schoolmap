@@ -8,88 +8,12 @@
 <script>
 
 
+/*
+*
+* presentation metadata (e.g. map color schemes) for each dataset
+*
+*/
 
-// drawing map on svg
-var width = 960
-    height = 700
-
-var svg = d3.select("body").append("svg")
-.attr({
-       width  : width,
-       height : height,
-       style  : "outline: 1px solid red; font-size: 2em; overflow: visible;",
-     })    
-
-var projection = d3.geo.mercator()
-    .center([-87.7, 41.9 ])
-    .scale([width * 80])
-
-var path = d3.geo.path().projection(projection)
-
-var default_color = '#CCCCCC'
-
-
-// make a map legend
-var legend_coordinates = { 'x': 100, 'y': 400 }
-var legend_element     = d3.select("svg").append("g")
-legend_element.attr({
-                    id : "legend",
-                    x  : legend_coordinates['x'],
-                    y  : legend_coordinates['y'],
-                   })
-var box_dimensions     = { 'height': 10, 'width': 10 }
-
-
-var make_legend = function (color, config, type) {
-    d3.selectAll(".legend_label").remove()
-    d3.selectAll(".legend_square").remove()
-    name     = config['button_name']
-    palette  = config['color_palette']
-    labels   = config['scale_range']
-    x_coord  = legend_coordinates['x']
-    y_coord  = legend_coordinates['y']
-    for (i=0;i<palette.length;i++){
-        if (type == 'ordinal'){
-            var range = labels[i]
-        } else {
-            var range = color.invertExtent(shade)
-        }
-        var shade        = palette[i]
-        var height       = box_dimensions['height']
-        var width        = box_dimensions['width']  
-        var this_square  = legend_element.append("rect")
-        this_square.attr({
-                 class   : 'legend_square',
-                 fill    : shade,
-                 x       : x_coord,
-                 y       : y_coord, // increments
-                 height  : box_dimensions['height'],
-                 width   : box_dimensions['width'], 
-                 })
-        
-        
-        var square_label = legend_element.append("text")
-        square_label.attr({
-                  class  : 'legend_label',
-                  x      : function(d) {return x_coord + 20}, // offset from square
-                  y      : y_coord
-                  })
-        square_label.text = labels[i]
-        y_coord = y_coord + 20 
-
-    //debugger;
-
-    }
-    /*
-    square_labels = legend_element.selectAll("text")
-                    .data(labels)
-                    .enter()
-                    .append("text")
-                    .text("textasfasdasf")
-    */
-}
-
-// presentation metadata (e.g. map color schemes) for each dataset
 var data_configs = {
                     /*
                     'example': {
@@ -101,31 +25,73 @@ var data_configs = {
                                }
                     ,
                     */
-                    'default': {
-                                'properties'    : 'default',
-                                'button_name'   : null,
-                                'domain_type'   : null,
-                                'scale_range'   : null,
-                                'color_palette' : null,
-                               }
-                    ,
-                    'race'   : {
-                                'properties'    : 'racial_majority',
-                                'button_name'   : 'Racial majority',
-                                'domain_type'   : 'ordinal',
-                                'scale_range'   : ['Black','White','Hispanic','Mixed'],
-                                'color_palette' : ['#a6cee3','#1f78b4', '#b2df8a', '#33a02c']
-                               }
-                    ,
-                    'hs'     : {
-                                'properties'    : 'hs_diploma_or_less',
-                                'button_name'   : 'No college',
-                                'domain_type'   : 'quantize',
-                                'scale_range'   : null, // min/max
-                                'color_palette' : ["rgb(237,248,233)", "rgb(186,228,179)","rgb(116,196,118)", "rgb(49,163,84)","rgb(0,109,44)"],
-                               }
+                    'default':       {
+                                      'properties'    : 'default',
+                                      'button_name'   : null,
+                                      'domain_type'   : null,
+                                      'scale_range'   : null,
+                                      'color_palette' : null,
+                                     },
+                    'race'   :       {
+                                      'properties'    : 'racial_majority',
+                                      'button_name'   : 'Race',
+                                      'domain_type'   : 'ordinal',
+                                      'scale_range'   : ['Black','White','Hispanic','Mixed'],
+                                      'color_palette' : ['#a6cee3','#1f78b4', '#b2df8a', '#33a02c']
+                                     },
+                    'hs'     :       {
+                                      'properties'    : 'hs_diploma_or_less',
+                                      'button_name'   : 'No college',
+                                      'domain_type'   : 'quantize',
+                                      'scale_range'   : null, // min/max
+                                      'color_palette' : ["rgb(237,248,233)", "rgb(186,228,179)","rgb(116,196,118)", "rgb(49,163,84)","rgb(0,109,44)"],
+                                     },
+                    'unemployment' : {
+                                      'properties'    : 'unemployment',
+                                      'button_name'   : 'Unemployment',
+                                      'domain_type'   : 'quantize',
+                                      'scale_range'   : null, // min/max
+                                      'color_palette' : ["rgb(237,248,233)", "rgb(186,228,179)","rgb(116,196,118)", "rgb(49,163,84)","rgb(0,109,44)"],
+                                     },
+                    'vacancy'      : {
+                                      'properties'    : 'vacancy',
+                                      'button_name'   : 'Vacancy',
+                                      'domain_type'   : 'quantize',
+                                      'scale_range'   : null, // min/max
+                                      'color_palette' : ["rgb(237,248,233)", "rgb(186,228,179)","rgb(116,196,118)", "rgb(49,163,84)","rgb(0,109,44)"],
+                                     },
+                    'poverty'      : {
+                                      'properties'    : 'poverty',
+                                      'button_name'   : 'Poverty',
+                                      'domain_type'   : 'quantize',
+                                      'scale_range'   : null, // min/max
+                                      'color_palette' : ["rgb(237,248,233)", "rgb(186,228,179)","rgb(116,196,118)", "rgb(49,163,84)","rgb(0,109,44)"],
+                                     }
 }
 
+
+/*
+*
+* drawing map on svg
+*
+*/
+
+var width = 960
+    height = 700
+
+var svg = d3.select("body").append("svg")
+.attr({
+       width  : width,
+       height : height,
+     })    
+
+var projection = d3.geo.mercator()
+    .center([-87.7, 41.9 ])
+    .scale([width * 80])
+
+var path = d3.geo.path().projection(projection)
+
+var default_color = '#CCCCCC'
 
 var map = d3.json("viz_data/data.geojson", function(json) {
     // get data and shapes
@@ -139,7 +105,7 @@ var map = d3.json("viz_data/data.geojson", function(json) {
     .data(comm_areas)
     .enter()
     .append("path")
-    //.attr("d",path) //comment out this line to speed up processing for testing
+    .attr("d",path) //comment out this line to speed up processing for testing
     .attr("class","cas")
     .attr("fill", default_color)
  
@@ -169,21 +135,131 @@ var map = d3.json("viz_data/data.geojson", function(json) {
                             color = d3.scale.quantize()
                             min = d3.min(comm_areas, function(ca) {return ca.properties[config.properties]})
                             max = d3.max(comm_areas, function(ca) {return ca.properties[config.properties]})
-                            color.domain([min, max])
+                            config['scale_range'] = ([min,max])
                         } catch(err) {
                             console.log(err)
                         }
                     }
+                color.domain(config['scale_range'])
                 // add colors
                 color.range(config['color_palette'])
                 svg.selectAll(".cas").attr("fill", function(d) {  return color(d.properties[config.properties]) })
-                make_legend(color,config,type)
+                //make_legend(color,config,type)
+                make_legend_d3(color,config,type)
                 }
             })
         }
     }    
-    
-  
+
+
+    /*
+    *
+    * put the schools on 
+    *
+    */
+    var schools = d3.csv("viz_data/geo_schools.csv", function(csv) {
+        svg.selectAll("circle")
+        .data(csv)
+        .enter()
+        .append("circle")
+        .attr("cx", function(d) {return projection([d.lon,d.lat])[0]}) 
+        .attr("cy", function(d) {return projection([d.lon,d.lat])[1]})
+        .attr("r", "5px")
+        .attr("class","schools")
+        .attr("fill", function(d) { return school_fill(d['Repurposed?'])}) // TODO: fill color based on repurpose
+        }
+    )
+
 })
+
+var school_fill = function(repurpose) {
+//
+    if (repurpose == 'yes') {
+        return "blue"} 
+    else {
+        return "gray"}
+}
+
+
+
+
+/*
+*
+* make a map legend
+*
+*/ 
+
+var legend_coordinates = { 'x': 100, 'y': 400 }
+var legend_element     = d3.select("svg").append("g")
+legend_element.attr({
+                    id : "legend",
+                    x  : legend_coordinates['x'],
+                    y  : legend_coordinates['y'],
+                   })
+
+var make_legend_d3 = function(color,config,type){
+    //bind_labels_to_colors(config.scale_range)
+    d3.selectAll(".legend_label").remove()
+    d3.selectAll(".legend_square").remove()
+
+    // set up name, color palette, labels, position    
+    var name           = config['button_name']
+    var palette        = config['color_palette']
+    var labels         = config['scale_range']
+    var x_coord        = legend_coordinates['x']
+    var y_coord        = legend_coordinates['y']
+    var box_dimensions = { 'height': 10, 'width': 10 }
+
+    // build data: {'color':'value_range'}
+    var data = []
+    for (i=0;i<palette.length;i++){
+        datum            = {}
+        datum['shade']   = palette[i]
+        if (type == 'ordinal'){
+            // labels are predefined text so go get them
+            var range = labels[i]
+        } else {
+            // labels are derived by quantized intervals
+            var range = color.invertExtent(datum['shade'])
+        }
+        datum['range']   = range
+        datum['y']       = y_coord
+        y_coord          = y_coord + 20
+        var height       = box_dimensions['height']
+        var width        = box_dimensions['width']  
+        data.push(datum)
+    }
+
+    // do some d3
+    var squares = legend_element.selectAll("rect")
+        .data(data)
+        .enter()
+        .append("rect")
+
+    var square_attributes = squares.attr({
+        class  : 'legend_label',
+        y      : function(d) { return d.y},
+        x      : x_coord,
+        fill   : function(d) { return d.shade},
+        height : height,
+        width  : width,
+    })
+
+    var labels = legend_element.selectAll("text")
+        .data(data)
+        .enter()
+        .append("text")
+
+    var label_attributes = labels.attr({
+        class     : 'legend_label',
+        y         : function(d) { return d.y + height},
+        x         : x_coord + 20,
+        'font-size' : '10px'
+    })
+
+    var labels_text = labels.text(function(d){return d.range})
+
+}
+
 
 </script>

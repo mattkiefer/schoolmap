@@ -27,14 +27,16 @@ vizdata_file_path       = vizdata_dir + vizdata_file_name
 vizdata_file            = open(vizdata_file_path,'w')
 comm_area_boundary_ep   = 'https://data.cityofchicago.org/resource/igwz-8jzy.json' 
 comm_area_boundary_file = 'source_data/comm_area_boundaries.json'
-census_tables           = ['B03002','B15003']
+census_tables           = ['B03002','B15003','B25002','C17002']
 refresh_data            = False # set to False if data already collected
+crime_api_endpoint      = 'https://data.cityofchicago.org/resource/vu4n-ihzf.json'
 ### END CONFIG   ### 
 
 
 def run_raw_reports():
     if not refresh_data:
         return
+    get_crime_data()
     for table in census_tables:
         init(table_arg=table,output_dir_arg=output_dir)
 
@@ -53,10 +55,21 @@ def build_geojson():
     js  = get_comm_areas()
     js  = bind_race_to_json(js)
     js  = bind_edu_att_to_json(js)
+    js  = bind_unemployment_to_json(js)
+    js  = bind_vacancy_to_json(js)
+    js  = bind_poverty_to_json(js)
     gjs = geojsonify(js)
     json.dump(gjs,vizdata_file,indent=4)
 
     vizdata_file.close()
+
+
+def get_crime_data():
+    response = requests.get(crime_api_endpoint)
+    j = response.json()
+    wf = open('source_data/crime.json','w')
+    wf.write(j)
+    wf.close()
 
 
 def bind_race_to_json(js):
@@ -130,6 +143,57 @@ def calc_hs_only(row):
         import ipdb; ipdb.set_trace()
 
 
+def bind_unemployment_to_json(js):
+    for row in csv.DictReader(open(output_dir + 'B23025_moe.csv')):
+        j_comm_area = [x for x in js['features'] if x['properties']['area_numbe'] == row['Community Area ID']][0]
+        j_comm_area['unemployment'] = calc_unemployment(row)
+    return js
+
+
+def calc_unemployment(row):
+    try:
+        total      = row['B23025_001E: Total:']
+        unemployed = row['B23025_005E: In labor force:!!Civilian labor force:!!Unemployed']
+        rate = round(int(unemployed)/float(total),2)
+        return rate
+    except Exception, e:
+        import ipdb; ipdb.set_trace()
+
+
+def bind_vacancy_to_json(js):
+    for row in csv.DictReader(open(output_dir + 'B25002_moe.csv')):
+        j_comm_area = [x for x in js['features'] if x['properties']['area_numbe'] == row['Community Area ID']][0]
+        j_comm_area['vacancy'] = calc_vacancy(row)
+    return js
+
+
+def calc_vacancy(row):
+    try:
+        total      = row['B25002_001E: Total:']
+        vacant     = row['B25002_003E: Vacant']
+        rate       = round(int(vacant)/float(total),2)
+        return rate
+    except Exception, e:
+        import ipdb; ipdb.set_trace()
+
+
+def bind_poverty_to_json(js):
+    for row in csv.DictReader(open(output_dir + 'C17002_moe.csv')):
+        j_comm_area = [x for x in js['features'] if x['properties']['area_numbe'] == row['Community Area ID']][0]
+        j_comm_area['poverty'] = calc_poverty(row)
+    return js
+
+
+def calc_poverty(row):
+    try:
+        total      = row['C17002_001E: Total:']
+        under_pov  = sum(int(x) for x in [row['C17002_002E: Under .50'],row['C17002_003E: .50 to .99']] if x != 'NA')
+        rate       = round(int(under_pov)/float(total),2)
+        return rate
+    except Exception, e:
+        import ipdb; ipdb.set_trace()
+
+
 def init_research():
     run_raw_reports()
     build_geojson()
@@ -146,6 +210,9 @@ def geojsonify(js):
                       "area_numbe"        : cap["area_numbe"],
                       "hs_diploma_or_less": ca["hs_diploma_or_less"],
                       "racial_majority"   : ca["racial_majority"],
+                      "unemployment"      : ca["unemployment"],
+                      "vacancy"           : ca["vacancy"],
+                      "poverty"           : ca["poverty"],
                      }
         except Exception, e:
             import ipdb; ipdb.set_trace()
