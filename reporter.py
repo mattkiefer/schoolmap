@@ -30,6 +30,7 @@ comm_area_boundary_file = 'source_data/comm_area_boundaries.json'
 census_tables           = ['B03002','B15003','B25002','C17002']
 refresh_data            = False # set to False if data already collected
 crime_api_endpoint      = 'https://data.cityofchicago.org/resource/vu4n-ihzf.json'
+crime_filename          = 'source_data/crime.json'
 ### END CONFIG   ### 
 
 
@@ -65,11 +66,31 @@ def build_geojson():
 
 
 def get_crime_data():
-    response = requests.get(crime_api_endpoint)
-    j = response.json()
-    wf = open('source_data/crime.json','w')
-    wf.write(j)
-    wf.close()
+    # note that I never got the json because it's an associative array 
+    if refresh_data:
+        response = requests.get(crime_api_endpoint)
+        j = response.json()
+        wf = open(crime_filename)
+        wf.write(j)
+        wf.close()
+
+
+def parse_crime_data():
+    get_crime_data()
+    # data = json.load(open(crime_filename,'r'))
+    # import ipdb; ipdb.set_trace()
+    # note that i'm using csv but should use json because apis
+    crime_data = {
+            """
+            ### sample data ###
+            {'community area': 
+                              'violent'    : 0,
+                              'nonviolent' : 0,
+            """
+            } 
+    
+    for row in csv.DictReader(open(crime_filename)):
+
 
 
 def bind_race_to_json(js):
