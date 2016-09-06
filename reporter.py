@@ -29,8 +29,8 @@ comm_area_boundary_ep   = 'https://data.cityofchicago.org/resource/igwz-8jzy.jso
 comm_area_boundary_file = 'source_data/comm_area_boundaries.json'
 census_tables           = ['B03002','B15003','B25002','C17002']
 refresh_data            = False # set to False if data already collected
-crime_api_endpoint      = 'https://data.cityofchicago.org/resource/vu4n-ihzf.json'
-crime_filename          = 'source_data/crime.json'
+crime_api_endpoint      = 'https://data.cityofchicago.org/resource/6zsd-86xi.json' # broken
+crime_filename          = 'source_data/crime.csv'
 ### END CONFIG   ### 
 
 
@@ -54,6 +54,7 @@ def get_comm_areas():
 
 def build_geojson():
     js  = get_comm_areas()
+    js  = bind_crime_to_json(js)
     js  = bind_race_to_json(js)
     js  = bind_edu_att_to_json(js)
     js  = bind_unemployment_to_json(js)
@@ -76,22 +77,61 @@ def get_crime_data():
 
 
 def parse_crime_data():
+    all_crime_types = ['ARSON', 'ASSAULT', 'BATTERY', 'BURGLARY', 'CONCEALED CARRY LICENSE VIOLATION', 'CRIM SEXUAL ASSAULT', 'CRIMINAL DAMAGE', 'CRIMINAL TRESPASS', 'DECEPTIVE PRACTICE', 'GAMBLING', 'HOMICIDE', 'HUMAN TRAFFICKING', 'INTERFERENCE WITH PUBLIC OFFICER', 'INTIMIDATION', 'KIDNAPPING', 'LIQUOR LAW VIOLATION', 'MOTOR VEHICLE THEFT', 'NARCOTICS', 'NON - CRIMINAL', 'NON-CRIMINAL', 'NON-CRIMINAL (SUBJECT SPECIFIED)', 'OBSCENITY', 'OFFENSE INVOLVING CHILDREN', 'OTHER NARCOTIC VIOLATION', 'OTHER OFFENSE', 'PROSTITUTION', 'PUBLIC INDECENCY', 'PUBLIC PEACE VIOLATION', 'ROBBERY', 'SEX OFFENSE', 'STALKING', 'THEFT', 'WEAPONS VIOLATION']
+    violent_crime_types = ['ASSAULT', 'BATTERY', 'CRIM SEXUAL ASSAULT', 'HOMICIDE', 'HUMAN TRAFFICKING', 'INTIMIDATION', 'KIDNAPPING', 'ROBBERY', 'SEX OFFENSE', 'STALKING']
+    property_crime_types = ['ARSON', 'BURGLARY', 'CRIMINAL DAMAGE', 'CRIMINAL TRESPASS', 'DECEPTIVE PRACTICE', 'MOTOR VEHICLE THEFT', 'THEFT']
     get_crime_data()
     # data = json.load(open(crime_filename,'r'))
     # import ipdb; ipdb.set_trace()
     # note that i'm using csv but should use json because apis
-    crime_data = {
-            """
-            ### sample data ###
-            {'community area': 
-                              'violent'    : 0,
-                              'nonviolent' : 0,
-            """
-            } 
-    
+    crime_data = dict()
+    """
+    ### sample data ###
+    {'community area':
+                      {
+                       'violent'    : 0,
+                       'property'   : 0,
+                       'pop'        : 0,
+                      }  
+    """
     for row in csv.DictReader(open(crime_filename)):
+        # add community area to crime_data if necessary
+        ca = row['Community Area']
+        if ca == "0":
+            continue
+        try:
+            if ca not in crime_data:
+                crime_data[ca] = {'violent':0,'property':0}
+        except Exception, e:
+            import ipdb; ipdb.set_trace()
+        pt = row['Primary Type']
+        if pt in violent_crime_types:
+            crime_data[ca]['violent'] += 1
+        elif pt in property_crime_types:
+            crime_data[ca]['property'] += 1
+        else:
+            pass
+    if refresh_data: 
+        init(table_arg='B01003',output_dir_arg=output_dir) 
+    for row in csv.DictReader(open(output_dir + '/B01003_moe.csv')):
+        crime_data[row['Community Area ID']]['pop'] = row['B01003_001E: Total']
+    for caid in crime_data:
+        crime_data[caid]['property_rate'] = int(crime_data[caid]['property'] / float(crime_data[caid]['pop']) * 100000)
+        crime_data[caid]['violent_rate'] = int(crime_data[caid]['violent'] / float(crime_data[caid]['pop']) * 100000)
+    return crime_data
 
 
+def bind_crime_to_json(js):
+    try:
+        crime_data = parse_crime_data()
+        for comm_area_id in crime_data:
+            # find the json element corresponding with this comm area
+            j_comm_area = [x for x in js['features'] if x['properties']['area_numbe'] == comm_area_id][0]
+            j_comm_area['property_crime_rate'] = crime_data[comm_area_id]['property_rate']
+            j_comm_area['violent_crime_rate'] = crime_data[comm_area_id]['violent_rate']
+        return js
+    except Exception,e:
+        import ipdb; ipdb.set_trace()
 
 def bind_race_to_json(js):
     """
@@ -234,6 +274,8 @@ def geojsonify(js):
                       "unemployment"      : ca["unemployment"],
                       "vacancy"           : ca["vacancy"],
                       "poverty"           : ca["poverty"],
+                      "property"          : ca["property_crime_rate"],
+                      "violent"           : ca["violent_crime_rate"],
                      }
         except Exception, e:
             import ipdb; ipdb.set_trace()
