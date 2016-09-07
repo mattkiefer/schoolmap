@@ -106,7 +106,7 @@ var data_configs = {
 *
 */
 
-var width = 960
+var width = 750
     height = 700
 
 var svg = d3.select("body").append("svg")
@@ -116,26 +116,29 @@ var svg = d3.select("body").append("svg")
      })    
 
 var projection = d3.geo.mercator()
-    .center([-87.7, 41.9 ])
-    .scale([width * 80])
+    .center([-87.7, 41.89 ])
+    .scale([width * 100])
 
 var path = d3.geo.path().projection(projection)
 
+var default_config = data_configs['race']
+
 var default_color = '#CCCCCC'
+
 
 var map = d3.json("viz_data/data.geojson", function(json) {
     // get data and shapes
     comm_areas = json.features
   
     // TODO: figure out how to handle default configs 
-    config = null
+    config = default_config
     
     // default map
     svg.selectAll("path")
     .data(comm_areas)
     .enter()
     .append("path")
-    //.attr("d",path) //comment out this line to speed up processing for testing
+    .attr("d",path) //comment out this line to speed up processing for testing
     .attr("class","cas")
     .attr("fill", default_color)
  
@@ -223,7 +226,7 @@ var school_fill = function(repurpose) {
 *
 */ 
 
-var legend_coordinates = { 'x': 100, 'y': 400 }
+var legend_coordinates = { 'x': 30, 'y': 30 }
 var legend_element     = d3.select("svg").append("g")
 legend_element.attr({
                     id : "legend",
