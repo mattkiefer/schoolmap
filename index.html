@@ -186,6 +186,45 @@ var picker = d3.select("#container")
                     })
 
 
+// set up the chatter
+//var chatter_box = d3.select("svg")
+var chatter_box = function() {
+                              d3.select("#container")
+                                .append("div")
+                                .attr({
+                                       id     : "chatterbox",
+                                       height : 200,
+                                       width  : 200,
+                                })
+}
+
+chatter_box()
+
+var chatter = function() {
+                          d3.select("#chatterbox")
+                            .append("p")
+}
+
+/*
+var fo = d3.select("#chatterbox")
+           .append("foreignObject")
+           .attr({
+                  id:'fo_chatter',
+                   x:50,
+                   y:200
+                 })
+
+var div = fo.append('xhtml:div')
+            .text("")
+            .attr({
+                   id   : "fo_chatter_div",
+                   width: 250
+                 })
+*/
+
+
+// draw the svg
+
 var svg = d3.select("#container").append("svg")
 .attr({
        width  : width,
@@ -234,7 +273,7 @@ var demo_switcher = function(config) {
     //make_legend(color,config,type)
     make_legend_d3(color,config,type)
     //swap chatter
-    d3.select("#fo_chatter_div").text(config['chatter'])
+    d3.select("#chatterbox").text(config['chatter'])
 }
 
 
@@ -362,7 +401,8 @@ var make_legend_d3 = function(color,config,type){
     d3.selectAll("#legend_subhed").remove()
 
     // build legend and headers
-    var legend_element     = d3.select("svg").append("g")
+    var legend_element     = d3.select("#container").append("g")
+    //var legend_element     = d3.select("svg").append("g")
                                              .attr({
                                                     id : "legend",
                                                     x  : x_coord,
@@ -457,40 +497,6 @@ var make_legend_d3 = function(color,config,type){
     var labels_text = labels.text(function(d){return d.range})
     
 }
-
-
-var chatter_box = d3.select("svg")
-                    .append("g")
-                    .attr({
-                           id     : "chatterbox",
-                           height : 200,
-                           width  : 200,
-                         })
-
-var chatter = d3.select("#chatterbox")
-                .append("text")
-                .text(" .")
-                /*.attr({
-                       id:'chatter',
-                       x:150,
-                       y:200
-                     })
-                */
-var fo = d3.select("#chatterbox")
-           .append("foreignObject")
-           .attr({
-                  id:'fo_chatter',
-                   x:50,
-                   y:200
-                 })
-
-var div = fo.append('xhtml:div')
-            .text("")
-            .attr({
-                   id   : "fo_chatter_div",
-                   width: 250
-                 })
-
 
 /*
 var chatter_group = d3.select("svg")
