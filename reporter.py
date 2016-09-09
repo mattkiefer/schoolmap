@@ -14,7 +14,7 @@ todo:
 I'm still figuring out how to organize research projects.
 This is not the way.
 """
-import csv, json, requests
+import csv, json, requests, subprocess
 from chi_census.comm_area_data import init
 from geojson import Feature, FeatureCollection, MultiPolygon
 
@@ -27,10 +27,11 @@ vizdata_file_path       = vizdata_dir + vizdata_file_name
 vizdata_file            = open(vizdata_file_path,'w')
 comm_area_boundary_ep   = 'https://data.cityofchicago.org/resource/igwz-8jzy.json' 
 comm_area_boundary_file = 'source_data/comm_area_boundaries.json'
-census_tables           = ['B03002','B15003','B25002','C17002']
+census_tables           = ['B03002','B15003','B25002','C17002','B23025']
 refresh_data            = False # set to False if data already collected
 crime_api_endpoint      = 'https://data.cityofchicago.org/resource/6zsd-86xi.json' # broken
 crime_filename          = 'source_data/crime.csv'
+simplification_level    = ".0005"
 ### END CONFIG   ### 
 
 
@@ -61,9 +62,21 @@ def build_geojson():
     js  = bind_vacancy_to_json(js)
     js  = bind_poverty_to_json(js)
     gjs = geojsonify(js)
-    json.dump(gjs,vizdata_file,indent=4)
-
+    json.dump(gjs,vizdata_file)
     vizdata_file.close()
+    simplify_json()
+
+
+def simplify_json():
+    subprocess.call(
+                    [
+                     "ogr2ogr",
+                     "-f","GeoJSON",
+                     "-simplify",simplification_level,
+                     vizdata_file_path, # output file
+                     vizdata_file_path, # input file
+                    ]
+                   )
 
 
 def get_crime_data():
@@ -132,6 +145,7 @@ def bind_crime_to_json(js):
         return js
     except Exception,e:
         import ipdb; ipdb.set_trace()
+
 
 def bind_race_to_json(js):
     """
@@ -213,9 +227,9 @@ def bind_unemployment_to_json(js):
 
 def calc_unemployment(row):
     try:
-        total      = row['B23025_001E: Total:']
+        total      = row['B23025_003E: In labor force:!!Civilian labor force:']
         unemployed = row['B23025_005E: In labor force:!!Civilian labor force:!!Unemployed']
-        rate = round(int(unemployed)/float(total),2)
+        rate = float(unemployed)/float(total)
         return rate
     except Exception, e:
         import ipdb; ipdb.set_trace()

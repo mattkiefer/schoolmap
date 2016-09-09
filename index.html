@@ -1,6 +1,43 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
-<style></style>
+<head>
+<style>
+
+body, svg {
+           font-family : 'Open Sans', sans-serif;
+          }
+
+svg { 
+     text-align: center;
+    }
+
+#picker {
+         //width: 200px;
+         text-align: center;
+        }
+
+#picker li {
+         list-style   : none;
+         border-radius: 4px;
+         display      : inline;
+         font-size    : 14px;
+         font-weight  : bold;
+         color        : #FFFFFF;  
+         margin       : 10px;
+         //border-style : solid;
+         //border-width : 2px;
+         //border-color : #CCCCCC;
+         padding      : 5px;    
+         background-color: #BBBBBB;
+}
+
+#container{
+           text-align:center;
+           width:750px;
+}
+
+</style>
+</head>
 <body>
 <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 <script src="https://d3js.org/topojson.v1.min.js"></script>
@@ -32,6 +69,9 @@ var data_configs = {
                                       'domain_type'   : null,
                                       'scale_range'   : null,
                                       'color_palette' : null,
+                                      'html_id'       : 'default',
+                                      'hed'           : null,
+                                      'subhed'        : null,
                                       'chatter'       : null,
                                      },
                     'race'   :       {
@@ -40,17 +80,23 @@ var data_configs = {
                                       'button_name'   : 'Race',
                                       'domain_type'   : 'ordinal',
                                       'scale_range'   : ['Black','White','Hispanic','Mixed'],
-                                      'color_palette' : ['#a6cee3','#1f78b4', '#b2df8a', '#33a02c'],
-                                      'chatter'       : 'kjasbdasdnasdjkln'
+                                      'color_palette' : ['#fbb4ae','#b3cde3','#ccebc5','#decbe4'],
+                                      'html_id'       : 'race',
+                                      'hed'           : 'Majority',
+                                      'subhed'        : 'Denotes which race accounts for more than 50 percent of population, if any',
+                                      'chatter'       : 'Chatter for race data goes here.'
                                      },
                     'hs'     :       {
                                       'properties'    : 'hs_diploma_or_less',
                                       'data_type'     : 'pct',
-                                      'button_name'   : 'No college',
+                                      'button_name'   : 'Education',
                                       'domain_type'   : 'quantize',
                                       'scale_range'   : null, // min/max
-                                      'color_palette' : ["rgb(237,248,233)", "rgb(186,228,179)","rgb(116,196,118)", "rgb(49,163,84)","rgb(0,109,44)"],
-                                      'chatter'       : 'dthueruywerhwvwqevwqevqfv',
+                                      'color_palette' : ["rgb(186,228,179)","rgb(116,196,118)", "rgb(49,163,84)","rgb(0,109,44)"],
+                                      'html_id'       : 'hs',
+                                      'hed'           : 'No college',
+                                      'subhed'        : 'Denotes percent of population attaining up to high school diploma or GED',
+                                      'chatter'       : 'Chatter for high school-level education data goes here.',
                                      },
                     'unemployment' : {
                                       'properties'    : 'unemployment',
@@ -58,17 +104,23 @@ var data_configs = {
                                       'button_name'   : 'Unemployment',
                                       'domain_type'   : 'quantize',
                                       'scale_range'   : null, // min/max
-                                      'color_palette' : ["rgb(237,248,233)", "rgb(186,228,179)","rgb(116,196,118)", "rgb(49,163,84)","rgb(0,109,44)"],
-                                      'chatter'       : 'vqwqvfqvqwvqvqvqwvqwvqwf',
+                                      'color_palette' : ["#b3cde3","#8c96c6","#8856a7","#810f7c"],
+                                      'html_id'       : 'unemployment',
+                                      'hed'           : 'Unemployment',
+                                      'subhed'        : 'Percent of civilian workforce reported as unemployed between 2010 and 2014',
+                                      'chatter'       : 'Chatter for unemployment data goes here.',
                                      },
                     'vacancy'      : {
                                       'properties'    : 'vacancy',
                                       'data_type'     : 'pct',
-                                      'button_name'   : 'Vacancy',
+                                      'button_name'   : 'Vacancies',
                                       'domain_type'   : 'quantize',
                                       'scale_range'   : null, // min/max
-                                      'color_palette' : ["rgb(237,248,233)", "rgb(186,228,179)","rgb(116,196,118)", "rgb(49,163,84)","rgb(0,109,44)"],
-                                      'chatter'       : 'skdjghadkjfnakjdnakscj askcj a',
+                                      'color_palette' : ["#bdd7e7","#6baed6","#3182bd","#08519c"],
+                                      'html_id'       : 'vacancy',
+                                      'hed'           : 'Vacant homes',
+                                      'subhed'        : 'Share of housing stock reported vacant 2010-2014',
+                                      'chatter'       : 'Chatter for residential vacancy data goes here.',
                                      },
                     'poverty'      : {
                                       'properties'    : 'poverty',
@@ -76,8 +128,11 @@ var data_configs = {
                                       'button_name'   : 'Poverty',
                                       'domain_type'   : 'quantize',
                                       'scale_range'   : null, // min/max
-                                      'color_palette' : ["rgb(237,248,233)", "rgb(186,228,179)","rgb(116,196,118)", "rgb(49,163,84)","rgb(0,109,44)"],
-                                      'chatter'       : 'asc89i933hnr',
+                                      'color_palette' : ["#d7b5d8","#df65b0","#dd1c77","#980043"],
+                                      'html_id'       : 'poverty',
+                                      'hed'           : 'Poverty',
+                                      'subhed'        : 'Population living underneath federal poverty level',
+                                      'chatter'       : 'Chatter for poverty data goes here.',
                                      },
                     'property'     : {
                                       'properties'    : 'property',
@@ -85,8 +140,11 @@ var data_configs = {
                                       'button_name'   : 'Property crime',
                                       'domain_type'   : 'quantize',
                                       'scale_range'   : null, // min/max
-                                      'color_palette' : ["rgb(237,248,233)", "rgb(186,228,179)","rgb(116,196,118)", "rgb(49,163,84)","rgb(0,109,44)"],
-                                      'chatter'       : '8u9898h98uwsghsrgohs',
+                                      'color_palette' : ["#fdbe85","#fd8d3c","#e6550d","#a63603"],
+                                      'html_id'       : 'property',
+                                      'hed'           : 'Per-capita property crime',
+                                      'subhed'        : 'Includes thefts, burglaries, vandalism, etc. per 100,000 residents',
+                                      'chatter'       : 'Chatter for property crime data goes here.',
                                      },
                     'violent'      : {
                                       'properties'    : 'violent',
@@ -94,8 +152,11 @@ var data_configs = {
                                       'button_name'   : 'Violent crime',
                                       'domain_type'   : 'quantize',
                                       'scale_range'   : null, // min/max
-                                      'color_palette' : ["rgb(237,248,233)", "rgb(186,228,179)","rgb(116,196,118)", "rgb(49,163,84)","rgb(0,109,44)"],
-                                      'chatter'       : 'asfasfafafglihuoihoh',
+                                      'color_palette' : ["#fcae91","#fb6a4a","#de2d26","#a50f15"],
+                                      'html_id'       : 'violent',
+                                      'hed'           : 'Per-capita violent crime',
+                                      'subhed'        : 'Includes batteries, robberies, murders, etc. per 100,000 residents',
+                                      'chatter'       : 'Chatter for violent crime data goes here.',
                                      }
 }
 
@@ -109,29 +170,81 @@ var data_configs = {
 var width = 750
     height = 700
 
-var svg = d3.select("body").append("svg")
+var container = d3.select("body")
+                  .append("div")
+                  .attr({
+                         id : "container",
+                         width : "750px",
+                       })
+
+// set up the list of demographic pickers
+var picker = d3.select("#container")
+               .append("ul")
+               .attr({
+                      id : "picker",
+                      style: "width: 750px", // ugggghhhh javascript is sooo weird!!!
+                    })
+
+
+var svg = d3.select("#container").append("svg")
 .attr({
        width  : width,
        height : height,
      })    
 
 var projection = d3.geo.mercator()
-    .center([-87.7, 41.89 ])
+    .center([-87.72, 41.89 ])
     .scale([width * 100])
 
 var path = d3.geo.path().projection(projection)
 
 var default_config = data_configs['race']
+var default_picker_color  = default_config['color_palette'][default_config['color_palette'].length-1]
 
-var default_color = '#CCCCCC'
+var default_color = '#AAAAAA'
+
+var demo_switcher = function(config) {
+    config['button_color'] = config['color_palette'][config['color_palette'].length-1]
+    
+    // fill colors     
+    d3.selectAll("#picker li")
+      .attr({
+             style: "background-color: " + default_color + ";",
+           })
+    d3.select('#' + config['html_id'])
+      .attr({
+             style: "background-color:" + config['button_color'] + ";", 
+           })
+
+    if (config['domain_type'] == 'ordinal') {
+        type = 'ordinal'
+        color = d3.scale.ordinal()
+        color.domain([config['scale_range']])
+    } else {
+        type = 'quantize'
+        color = d3.scale.quantize()
+        min = d3.min(comm_areas, function(ca) {return ca.properties[config.properties]})
+        max = d3.max(comm_areas, function(ca) {return ca.properties[config.properties]})
+        config['scale_range'] = ([min,max])
+    }
+    color.domain(config['scale_range'])
+    // add colors
+    color.range(config['color_palette'])
+    svg.selectAll(".cas").attr("fill", function(d) {  return color(d.properties[config.properties]) })
+    //make_legend(color,config,type)
+    make_legend_d3(color,config,type)
+    //swap chatter
+    d3.select("#fo_chatter_div").text(config['chatter'])
+}
+
 
 
 var map = d3.json("viz_data/data.geojson", function(json) {
+//var map = d3.json("viz_data/data.topojson", function(json) {
     // get data and shapes
     comm_areas = json.features
-  
-    // TODO: figure out how to handle default configs 
-    config = default_config
+    //comm_areas = topojson.feature(json, json.objects.data.geometries)
+ 
     
     // default map
     svg.selectAll("path")
@@ -141,52 +254,43 @@ var map = d3.json("viz_data/data.geojson", function(json) {
     .attr("d",path) //comment out this line to speed up processing for testing
     .attr("class","cas")
     .attr("fill", default_color)
- 
-    
+  
+    // TODO: figure out how to handle default configs 
+    config = default_config
+    demo_switcher(config)
+   
     // load switches and click events from var data_configs
     for (config_name in data_configs) {
         if (config_name != 'default') {
             var this_config = data_configs[config_name]
             button_name = this_config['button_name']
+            this_config['button_color'] = this_config['color_palette'][this_config['color_palette'].length-1]
             // instantiate the toggle switches
-            d3.select("body").append("p").attr("id",config_name).html(button_name)
-            // add onclicks, set global config
-            //.on("click", swap_chatter(this_config))
-            .on("click",function() { 
-                config = data_configs[this.id]
-                // handle ordinal (text) vs quantize (numerical) choropleths 
-                if (! config) {
-                    // but first check if we have a dataset selected
-                    // ... and if not, pass
-                } else {
-                    if (config['domain_type'] == 'ordinal') {
-                        type = 'ordinal'
-                        color = d3.scale.ordinal()
-                        color.domain([config['scale_range']])
+            d3.select("#picker")
+                .append("li")
+                .html(button_name)
+                .attr({
+                       id    : config_name,
+                       style : "border-color:" + this_config['button_color'] + ";", 
+                     })
+                // add onclicks, set global config
+                .on("click",function() {
+                    config = data_configs[this.id]
+                    // handle ordinal (text) vs quantize (numerical) choropleths 
+                    if (! config) {
+                        // but first check if we have a dataset selected
+                        // ... and if not, pass
                     } else {
-                        try {
-                            type = 'quantize'
-                            color = d3.scale.quantize()
-                            min = d3.min(comm_areas, function(ca) {return ca.properties[config.properties]})
-                            max = d3.max(comm_areas, function(ca) {return ca.properties[config.properties]})
-                            config['scale_range'] = ([min,max])
-                        } catch(err) {
-                            console.log(err)
-                        }
+                        demo_switcher(config)
                     }
-                color.domain(config['scale_range'])
-                // add colors
-                color.range(config['color_palette'])
-                svg.selectAll(".cas").attr("fill", function(d) {  return color(d.properties[config.properties]) })
-                //make_legend(color,config,type)
-                make_legend_d3(color,config,type)
-                //swap chatter
-                d3.select("#fo_chatter_div").text(config['chatter'])
-                }
-            })
-            //.on("click",function(){d3.select("#chatter").text("bar")})
+                })
+                //.on("click",function(){d3.select("#chatter").text("bar")})
         }
     }    
+    // color that default button ... hack!
+    d3.select("#" + default_config['html_id'])
+      .attr("style","background-color:" + default_picker_color + ";")
+
 
 
     /*
@@ -214,7 +318,7 @@ var school_fill = function(repurpose) {
     if (repurpose == 'yes') {
         return "blue"} 
     else {
-        return "gray"}
+        return "#AAAAAA"}
 }
 
 
@@ -226,13 +330,7 @@ var school_fill = function(repurpose) {
 *
 */ 
 
-var legend_coordinates = { 'x': 30, 'y': 30 }
-var legend_element     = d3.select("svg").append("g")
-legend_element.attr({
-                    id : "legend",
-                    x  : legend_coordinates['x'],
-                    y  : legend_coordinates['y'],
-                   })
+var legend_coordinates = { 'x': 50, 'y': 55 }
 
 var percentify = function(tuple) {
     min          = Math.round(tuple[0]*100)
@@ -242,21 +340,60 @@ var percentify = function(tuple) {
 }
 
 
+var rangify = function(tuple) {
+    return Math.round(tuple[0]).toLocaleString() + ' - ' + Math.round(tuple[1]).toLocaleString()
+}
+
+
 var make_legend_d3 = function(color,config,type){
-    //bind_labels_to_colors(config.scale_range)
-    d3.selectAll(".legend_label").remove()
-    d3.selectAll(".legend_square").remove()
 
     // set up name, color palette, labels, position    
     var name           = config['button_name']
     var palette        = config['color_palette']
     var labels         = config['scale_range']
     var x_coord        = legend_coordinates['x']
-    var y_coord        = legend_coordinates['y']
+    var y_coord        = legend_coordinates['y'] + 20
     var box_dimensions = { 'height': 10, 'width': 10 }
 
+    // remove old stuff
+    d3.selectAll(".legend_label").remove()
+    d3.selectAll(".legend_square").remove()
+    d3.selectAll("#legend_hed").remove()
+    d3.selectAll("#legend_subhed").remove()
+
+    // build legend and headers
+    var legend_element     = d3.select("svg").append("g")
+                                             .attr({
+                                                    id : "legend",
+                                                    x  : x_coord,
+                                                    y  : y_coord,
+                                                  }) 
+
+    var legend_hed = legend_element.append("text")
+                                   .attr({ 
+                                          id : "legend_hed",
+                                          x  : x_coord,
+                                          y  : y_coord,
+                                        })
+    
+    // make room for subhed ... next time use html foreignObject
+    y_coord = y_coord + 20
+
+    var legend_subhed = legend_element.append("text")
+                                   .attr({ 
+                                          id : "legend_subhed",
+                                          x  : x_coord,
+                                          y  : y_coord,
+                                        })
+
+    y_coord = y_coord + 20
+
+    legend_hed.text(config['hed'])
+    legend_subhed.text(config['subhed'])
+
+    
     // build data: {'color':'value_range'}
-    var data = []
+    var data = {'hed':'hed','subhed':'subhed','items':[]}
     for (i=0;i<palette.length;i++){
         datum            = {}
         datum['shade']   = palette[i]
@@ -267,18 +404,31 @@ var make_legend_d3 = function(color,config,type){
             // labels are derived by quantized intervals
             var range = color.invertExtent(datum['shade'])
             if (config['data_type'] == 'pct') { range = percentify(range) } 
+            else { range = rangify(range) } 
         }
         datum['range']   = range
         datum['y']       = y_coord
         y_coord          = y_coord + 20
+        datum['x']       = x_coord
         var height       = box_dimensions['height']
         var width        = box_dimensions['width']  
-        data.push(datum)
+        data.items.push(datum)
     }
 
     // do some d3
+    /*
+    var hed = legend_element.selectAll("text#legend_hed")
+                            .data(data.hed)
+                            .enter()
+                            .append("text")
+                            .attr({
+                                   "id":"legend_hed",
+                                 })
+    */
+
+
     var squares = legend_element.selectAll("rect")
-        .data(data)
+        .data(data.items)
         .enter()
         .append("rect")
 
@@ -291,10 +441,11 @@ var make_legend_d3 = function(color,config,type){
         width  : width,
     })
 
-    var labels = legend_element.selectAll("text")
-        .data(data)
+    var labels = legend_element.selectAll("#label")
+        .data(data.items)
         .enter()
         .append("text")
+        .attr("id","label")
 
     var label_attributes = labels.attr({
         class       : 'legend_label',
@@ -304,7 +455,7 @@ var make_legend_d3 = function(color,config,type){
     })
 
     var labels_text = labels.text(function(d){return d.range})
-
+    
 }
 
 
@@ -318,7 +469,7 @@ var chatter_box = d3.select("svg")
 
 var chatter = d3.select("#chatterbox")
                 .append("text")
-                .text(" sdas")
+                .text(" .")
                 /*.attr({
                        id:'chatter',
                        x:150,
@@ -329,15 +480,15 @@ var fo = d3.select("#chatterbox")
            .append("foreignObject")
            .attr({
                   id:'fo_chatter',
-                   x:250,
+                   x:50,
                    y:200
                  })
 
 var div = fo.append('xhtml:div')
-            .text("askdhasnkdjn  a ksdbakjdbh as asd as f  s h sd h wdsh s hs dhs dh s hshshs")
+            .text("")
             .attr({
                    id   : "fo_chatter_div",
-                   width: 100
+                   width: 250
                  })
 
 
