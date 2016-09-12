@@ -27,13 +27,26 @@ svg {
          //border-style : solid;
          //border-width : 2px;
          //border-color : #CCCCCC;
-         padding      : 5px;    
+         padding      : 6px;    
          background-color: #BBBBBB;
+}
+
+.legend_item {
+              list-style : none;
+              display    : inline;
+              padding    : 10px;
 }
 
 #container{
            text-align:center;
            width:750px;
+}
+
+.legend_square {
+                height  : 12px;
+                width   : 12px; 
+                display : inline-block;
+                margin-right: 5px;
 }
 
 </style>
@@ -43,7 +56,6 @@ svg {
 <script src="https://d3js.org/topojson.v1.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script>
-
 
 /*
 *
@@ -84,7 +96,7 @@ var data_configs = {
                                       'html_id'       : 'race',
                                       'hed'           : 'Majority',
                                       'subhed'        : 'Denotes which race accounts for more than 50 percent of population, if any',
-                                      'chatter'       : 'Chatter for race data goes here.'
+                                      'chatter'       : 'Following a trend in New York City, Philadelphia and elsewhere, black communities are most affected by public school closures. Three years after Chicago’s mass closures, black neighborhoods are still stuck with the most vacant schools, with xx and xx at the top of the list.'
                                      },
                     'hs'     :       {
                                       'properties'    : 'hs_diploma_or_less',
@@ -96,7 +108,7 @@ var data_configs = {
                                       'html_id'       : 'hs',
                                       'hed'           : 'No college',
                                       'subhed'        : 'Denotes percent of population attaining up to high school diploma or GED',
-                                      'chatter'       : 'Chatter for high school-level education data goes here.',
+                                      'chatter'       : 'Parents with less education are often the most eager to make sure their children have access to good schools. Communities in which adults often lack even a high school diploma, however, lost the most schools and end up stuck with vacant buildings.',
                                      },
                     'unemployment' : {
                                       'properties'    : 'unemployment',
@@ -108,7 +120,7 @@ var data_configs = {
                                       'html_id'       : 'unemployment',
                                       'hed'           : 'Unemployment',
                                       'subhed'        : 'Percent of civilian workforce reported as unemployed between 2010 and 2014',
-                                      'chatter'       : 'Chatter for unemployment data goes here.',
+                                      'chatter'       : 'High unemployment is an economic burden on black communities that were hit hardest by school closures. Chicago’s black unemployment rate of xx percent drives the statewide rate, which is the highest in the nation.',
                                      },
                     'vacancy'      : {
                                       'properties'    : 'vacancy',
@@ -120,7 +132,7 @@ var data_configs = {
                                       'html_id'       : 'vacancy',
                                       'hed'           : 'Vacant homes',
                                       'subhed'        : 'Share of housing stock reported vacant 2010-2014',
-                                      'chatter'       : 'Chatter for residential vacancy data goes here.',
+                                      'chatter'       : 'Community activists pointed out in 2013 that black communities were already overburdened with abandoned homes and buildings and didn’t need to add shuttered schools to the mix. That warning has materialized, especially in xx and xx, where residential vacancies are highest.',
                                      },
                     'poverty'      : {
                                       'properties'    : 'poverty',
@@ -132,7 +144,7 @@ var data_configs = {
                                       'html_id'       : 'poverty',
                                       'hed'           : 'Poverty',
                                       'subhed'        : 'Population living underneath federal poverty level',
-                                      'chatter'       : 'Chatter for poverty data goes here.',
+                                      'chatter'       : 'Communities with high poverty rates lost the most schools—and the stability and resources those schools could bring to help families and children break out of poverty.',
                                      },
                     'property'     : {
                                       'properties'    : 'property',
@@ -144,7 +156,7 @@ var data_configs = {
                                       'html_id'       : 'property',
                                       'hed'           : 'Per-capita property crime',
                                       'subhed'        : 'Includes thefts, burglaries, vandalism, etc. per 100,000 residents',
-                                      'chatter'       : 'Chatter for property crime data goes here.',
+                                      'chatter'       : 'Vandalism, theft and similar crimes are far more common in communities with still-vacant closed schools—which have in some cases become magnets for more property crime.',
                                      },
                     'violent'      : {
                                       'properties'    : 'violent',
@@ -156,7 +168,7 @@ var data_configs = {
                                       'html_id'       : 'violent',
                                       'hed'           : 'Per-capita violent crime',
                                       'subhed'        : 'Includes batteries, robberies, murders, etc. per 100,000 residents',
-                                      'chatter'       : 'Chatter for violent crime data goes here.',
+                                      'chatter'       : 'Shootings and other violent crimes are a heavy burden in black and brown communities where schools remain vacant.',
                                      }
 }
 
@@ -186,8 +198,147 @@ var picker = d3.select("#container")
                     })
 
 
+// set up legend
+var make_legend = function() {
+    // build legend and headers
+    var legend_element     = d3.select("#container").append("div")
+                                             .attr({
+                                                    id : "legend",
+                                                    x  : x_coord,
+                                                    y  : y_coord,
+                                                  }) 
+
+    var legend_hed = legend_element.insert("p")
+                                   .attr({ 
+                                          id : "legend_hed",
+                                        })
+
+    var legend_subhed = legend_element.append("p")
+                                   .attr({ 
+                                          id : "legend_subhed",
+                                        })
+    
+    var legend_item_list = legend_element.append("ul")
+                                         .attr({
+                                              id : "legend_item_list"
+                                            })
+
+}
+
+make_legend()
+
+var switch_legend = function(color,config,type){
+
+    // set up name, color palette, labels, position    
+    var name           = config['button_name']
+    var palette        = config['color_palette']
+    var labels         = config['scale_range']
+    var box_dimensions = { 'height': 10, 'width': 10 }
+
+    // remove old stuff
+    d3.selectAll(".legend_label").remove()
+    d3.selectAll(".legend_square").remove()
+    d3.selectAll(".legend_item").remove()
+    d3.selectAll("#legend_hed").remove()
+    d3.selectAll("#legend_subhed").remove()
+
+    var legend_element   = d3.select("#legend") 
+    var legend_hed       = d3.select("#legend_hed")
+    var legend_subhed    = d3.select("#legend_subhed")
+    var legend_item_list = d3.select("#legend_item_list")
+
+    legend_hed.text(config['hed'])
+    legend_subhed.text(config['subhed'])
+
+    
+    // build data: {'color':'value_range'}
+    var data = {'hed':'hed','subhed':'subhed','items':[]}
+    for (i=0;i<palette.length;i++){
+        datum            = {}
+        datum['shade']   = palette[i]
+        if (type == 'ordinal'){
+            // labels are predefined text so go get them
+            var range = labels[i]
+        } else {
+            // labels are derived by quantized intervals
+            var range = color.invertExtent(datum['shade'])
+            if (config['data_type'] == 'pct') { range = percentify(range) } 
+            else { range = rangify(range) } 
+        }
+        datum['range']   = range
+        datum['y']       = y_coord
+        y_coord          = y_coord + 20
+        datum['x']       = x_coord
+        var height       = box_dimensions['height']
+        var width        = box_dimensions['width']  
+        data.items.push(datum)
+    }
+
+    var legend_items = legend_item_list.selectAll("li")
+        .data(data.items)
+        .enter()
+        .append("li")
+        .attr({
+               class : "legend_item",
+             })
+
+    var legend_squares = legend_items.insert("span")
+                                     .attr({
+                                            "class" : "legend_square"
+                                          })
+
+    var legend_labels = legend_items.insert("span")
+                                    .attr({
+                                           "class" : "legend_label"
+                                         })
+
+    var square_attributes = legend_squares.attr({
+                                                 //style : function(d) { return d.shade} +";",
+                                                 style              : function(d) { return "background-color:" + d.shade + ";"},
+                                                 height             : height,
+                                                 width              : width,
+    })
+
+    var labels_text = legend_labels.text(function(d){return d.range})
+    
+/*
+
+    var legend_squares = legend_items.select("div")
+                                     .data(data.items)
+                                     .enter()
+                                     .append("div")
+                                     .attr({
+                                            class : "legend_squares"
+                                          })
+    /*
+
+    var square_attributes = squares.attr({
+        class      : 'legend_label',
+        background : function(d) { return d.shade},
+        height     : height,
+        width      : width,
+    })
+    
+    var labels = legend_element.selectAll("#label")
+        .data(data.items)
+        .enter()
+        .append("text")
+        .attr("id","label")
+
+    var label_attributes = labels.attr({
+        class       : 'legend_label',
+        y           : function(d) { return d.y + height},
+        x           : x_coord + 20,
+        'font-size' : '10px'
+    })
+
+    var labels_text = labels.text(function(d){return d.range})
+    
+*/
+}
+
+
 // set up the chatter
-//var chatter_box = d3.select("svg")
 var chatter_box = function() {
                               d3.select("#container")
                                 .append("div")
@@ -204,23 +355,6 @@ var chatter = function() {
                           d3.select("#chatterbox")
                             .append("p")
 }
-
-/*
-var fo = d3.select("#chatterbox")
-           .append("foreignObject")
-           .attr({
-                  id:'fo_chatter',
-                   x:50,
-                   y:200
-                 })
-
-var div = fo.append('xhtml:div')
-            .text("")
-            .attr({
-                   id   : "fo_chatter_div",
-                   width: 250
-                 })
-*/
 
 
 // draw the svg
@@ -271,7 +405,7 @@ var demo_switcher = function(config) {
     color.range(config['color_palette'])
     svg.selectAll(".cas").attr("fill", function(d) {  return color(d.properties[config.properties]) })
     //make_legend(color,config,type)
-    make_legend_d3(color,config,type)
+    switch_legend(color,config,type)
     //swap chatter
     d3.select("#chatterbox").text(config['chatter'])
 }
@@ -370,133 +504,21 @@ var school_fill = function(repurpose) {
 */ 
 
 var legend_coordinates = { 'x': 50, 'y': 55 }
+var x_coord        = legend_coordinates['x']
+var y_coord        = legend_coordinates['y'] + 20
 
 var percentify = function(tuple) {
     min          = Math.round(tuple[0]*100)
     max          = Math.round(tuple[1]*100)
-    range_string = min + "% - " + max + "%" 
+    range_string = min + "%-" + max + "%" 
     return range_string
 }
 
 
 var rangify = function(tuple) {
-    return Math.round(tuple[0]).toLocaleString() + ' - ' + Math.round(tuple[1]).toLocaleString()
+    return Math.round(tuple[0]).toLocaleString() + '-' + Math.round(tuple[1]).toLocaleString()
 }
 
-
-var make_legend_d3 = function(color,config,type){
-
-    // set up name, color palette, labels, position    
-    var name           = config['button_name']
-    var palette        = config['color_palette']
-    var labels         = config['scale_range']
-    var x_coord        = legend_coordinates['x']
-    var y_coord        = legend_coordinates['y'] + 20
-    var box_dimensions = { 'height': 10, 'width': 10 }
-
-    // remove old stuff
-    d3.selectAll(".legend_label").remove()
-    d3.selectAll(".legend_square").remove()
-    d3.selectAll("#legend_hed").remove()
-    d3.selectAll("#legend_subhed").remove()
-
-    // build legend and headers
-    var legend_element     = d3.select("#container").append("g")
-    //var legend_element     = d3.select("svg").append("g")
-                                             .attr({
-                                                    id : "legend",
-                                                    x  : x_coord,
-                                                    y  : y_coord,
-                                                  }) 
-
-    var legend_hed = legend_element.append("text")
-                                   .attr({ 
-                                          id : "legend_hed",
-                                          x  : x_coord,
-                                          y  : y_coord,
-                                        })
-    
-    // make room for subhed ... next time use html foreignObject
-    y_coord = y_coord + 20
-
-    var legend_subhed = legend_element.append("text")
-                                   .attr({ 
-                                          id : "legend_subhed",
-                                          x  : x_coord,
-                                          y  : y_coord,
-                                        })
-
-    y_coord = y_coord + 20
-
-    legend_hed.text(config['hed'])
-    legend_subhed.text(config['subhed'])
-
-    
-    // build data: {'color':'value_range'}
-    var data = {'hed':'hed','subhed':'subhed','items':[]}
-    for (i=0;i<palette.length;i++){
-        datum            = {}
-        datum['shade']   = palette[i]
-        if (type == 'ordinal'){
-            // labels are predefined text so go get them
-            var range = labels[i]
-        } else {
-            // labels are derived by quantized intervals
-            var range = color.invertExtent(datum['shade'])
-            if (config['data_type'] == 'pct') { range = percentify(range) } 
-            else { range = rangify(range) } 
-        }
-        datum['range']   = range
-        datum['y']       = y_coord
-        y_coord          = y_coord + 20
-        datum['x']       = x_coord
-        var height       = box_dimensions['height']
-        var width        = box_dimensions['width']  
-        data.items.push(datum)
-    }
-
-    // do some d3
-    /*
-    var hed = legend_element.selectAll("text#legend_hed")
-                            .data(data.hed)
-                            .enter()
-                            .append("text")
-                            .attr({
-                                   "id":"legend_hed",
-                                 })
-    */
-
-
-    var squares = legend_element.selectAll("rect")
-        .data(data.items)
-        .enter()
-        .append("rect")
-
-    var square_attributes = squares.attr({
-        class  : 'legend_label',
-        y      : function(d) { return d.y},
-        x      : x_coord,
-        fill   : function(d) { return d.shade},
-        height : height,
-        width  : width,
-    })
-
-    var labels = legend_element.selectAll("#label")
-        .data(data.items)
-        .enter()
-        .append("text")
-        .attr("id","label")
-
-    var label_attributes = labels.attr({
-        class       : 'legend_label',
-        y           : function(d) { return d.y + height},
-        x           : x_coord + 20,
-        'font-size' : '10px'
-    })
-
-    var labels_text = labels.text(function(d){return d.range})
-    
-}
 
 /*
 var chatter_group = d3.select("svg")
