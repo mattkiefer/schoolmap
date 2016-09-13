@@ -9,7 +9,7 @@ body, svg {
 
 #container{
            text-align : center;
-           width      : 750px;
+           width      : 320px;
 }
 
 svg { 
@@ -17,15 +17,16 @@ svg {
     }
 
 #picker {
-         //width: 200px;
+         width: 310px;
          text-align: left;
-         padding: 5px;
+         padding-left: 5px;
+         padding-right: 5px;
         }
 
 #picker li {
          list-style   : none;
          border-radius: 4px;
-         display      : inline;
+         display      : inline-block;
          font-size    : 14px;
          font-weight  : bold;
          color        : #FFFFFF;  
@@ -51,13 +52,14 @@ svg {
 
 #legend_hed { 
              font-weight : bold;
-             margin-top  : 13px;
+             margin-top  : -12px;
             }
 
 #legend_subhed {
                 text-align : left;
                 margin-top : -15px;
                 font-size  : 12px;
+                height     : 25px;
                }
 
 #legend_item_list, #school_legend_item_list {
@@ -65,10 +67,15 @@ svg {
                    list-style : none;
                   }
 
+#school_legend_item_list {
+                   margin-top: -10px;
+                  }
 
-.legend_item, #school_legend_item {
-              display    : inline;
-              padding    : 10px;
+.legend_item, .school_legend_item {
+              display      : inline-block;
+              padding-left : 8px;
+              padding-right : 8px;
+              padding-top : 2px;
 }
 
 .legend_square {
@@ -78,17 +85,21 @@ svg {
                 margin-right: 5px;
 }
 
-.legend_label, .school_legend_label { 
+.legend_label {
                font-size : 15px;
+              }
+
+.school_legend_label { 
+               font-size : 12px;
               }
 
 #chatterbox {
              text-align    : left;
-             height        : 50px;
-             padding-left  : 15px;
-             padding-right : 15px;
-             padding-top   : 5px;
+             height        : 140px;
+             padding-left  : 10px;
+             padding-right : 10px;
              font-size     : 15px;
+             margin-top    : -20px;
 }
 
 
@@ -268,14 +279,13 @@ school_types = [
 *
 */
 
-var width = 750
-    height = 700
+var width = 320
+    height = 530
 
 var container = d3.select("body")
                   .append("div")
                   .attr({
                          id : "container",
-                         width : "750px",
                        })
 
 // set up the list of demographic pickers
@@ -283,7 +293,6 @@ var picker = d3.select("#container")
                .append("ul")
                .attr({
                       id : "picker",
-                      style: "width: 750px", // ugggghhhh javascript is sooo weird!!!
                     })
 
 
@@ -455,12 +464,11 @@ var chatter_box = function() {
                                 .append("div")
                                 .attr({
                                        id     : "chatterbox",
-                                       height : 200,
-                                       width  : 200,
+                                       //height : 200,
+                                       width  : 300,
                                 })
 }
 
-chatter_box()
 
 make_legend()
 
@@ -479,8 +487,8 @@ var svg = d3.select("#container").append("svg")
      })    
 
 var projection = d3.geo.mercator()
-    .center([-87.63, 41.89 ])
-    .scale([width * 100])
+    .center([-87.36, 41.84 ])
+    .scale([width*175])
 
 var path = d3.geo.path().projection(projection)
 
@@ -632,26 +640,6 @@ var rangify = function(tuple) {
     return Math.round(tuple[0]).toLocaleString() + '-' + Math.round(tuple[1]).toLocaleString()
 }
 
-
-/*
-var chatter_group = d3.select("svg")
-                      .append("g")
-                      .attr({
-                             id : "chatterbox",
-                             x  : 100,
-                             y  : 600,
-                           })
-
-
-var chatter_box = d3.select("#chatterbox")
-                    .append("text")
-                    .attr({
-                           id  : "chatter",
-                         })
-
-var swap_chatter = function(chatter) {
-    d3.select('#chatterbox').append("text").text(chatter) 
-}
-*/
+chatter_box()
 
 </script>
