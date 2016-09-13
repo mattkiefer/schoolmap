@@ -32,6 +32,7 @@ refresh_data            = False # set to False if data already collected
 crime_api_endpoint      = 'https://data.cityofchicago.org/resource/6zsd-86xi.json' # broken
 crime_filename          = 'source_data/crime.csv'
 simplification_level    = ".0005"
+remove_ohare            = True 
 ### END CONFIG   ### 
 
 
@@ -61,10 +62,18 @@ def build_geojson():
     js  = bind_unemployment_to_json(js)
     js  = bind_vacancy_to_json(js)
     js  = bind_poverty_to_json(js)
+    js  = bye_ohare(js)
     gjs = geojsonify(js)
     json.dump(gjs,vizdata_file)
     vizdata_file.close()
     simplify_json()
+
+
+def bye_ohare(js):
+    if remove_ohare:
+        features = [x for x in js['features'] if x['properties']['community'] != 'OHARE']
+        js['features'] = features
+    return js
 
 
 def simplify_json():

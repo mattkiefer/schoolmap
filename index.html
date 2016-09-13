@@ -7,13 +7,19 @@ body, svg {
            font-family : 'Open Sans', sans-serif;
           }
 
+#container{
+           text-align : center;
+           width      : 750px;
+}
+
 svg { 
      text-align: center;
     }
 
 #picker {
          //width: 200px;
-         text-align: center;
+         text-align: left;
+         padding: 5px;
         }
 
 #picker li {
@@ -27,19 +33,42 @@ svg {
          //border-style : solid;
          //border-width : 2px;
          //border-color : #CCCCCC;
-         padding      : 6px;    
+         padding-left   : 7px;    
+         padding-right  : 7px;    
+         padding-top    : 9px;
+         padding-bottom : 9px;
          background-color: #BBBBBB;
 }
 
-.legend_item {
-              list-style : none;
+#legend {
+         margin-bottom : -15px;
+        }
+
+#legend_hed, #legend_subhed {
+                             text-align  : left;
+                             margin-left : 12px;
+                            }
+
+#legend_hed { 
+             font-weight : bold;
+             margin-top  : 13px;
+            }
+
+#legend_subhed {
+                text-align : left;
+                margin-top : -15px;
+                font-size  : 12px;
+               }
+
+#legend_item_list, #school_legend_item_list {
+                   margin-top : -5px;
+                   list-style : none;
+                  }
+
+
+.legend_item, #school_legend_item {
               display    : inline;
               padding    : 10px;
-}
-
-#container{
-           text-align:center;
-           width:750px;
 }
 
 .legend_square {
@@ -49,6 +78,50 @@ svg {
                 margin-right: 5px;
 }
 
+.legend_label, .school_legend_label { 
+               font-size : 15px;
+              }
+
+#chatterbox {
+             text-align    : left;
+             height        : 50px;
+             padding-left  : 15px;
+             padding-right : 15px;
+             padding-top   : 5px;
+             font-size     : 15px;
+}
+
+
+.schools-repurposed {
+                      fill: #666666;
+                     }
+
+.schools-not-repurposed {
+                 fill: #EEEEEE;
+                 stroke-width: 1px;
+                 stroke: #111111
+                }
+
+#label-repurposed {
+             background: #666666;
+             display: inline-block;
+             height: 10px;
+             width: 10px;
+             border-radius: 10px;
+             margin-right: 3px;
+}
+
+#label-not-repurposed {
+             background: #EEEEEE;
+             display: inline-block;
+             height: 9px;
+             width: 9px;
+             border-color: #111111;
+             border-width: 1px;
+             border-style: solid;
+             border-radius: 10px;
+             margin-right: 3px;
+}
 </style>
 </head>
 <body>
@@ -56,6 +129,16 @@ svg {
 <script src="https://d3js.org/topojson.v1.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script>
+
+// testing or prod?
+deploy = false;
+if (deploy == true) {
+    data_file_uri = 'https://s3.amazonaws.com/projects.chicagoreporter.com/graphics/schoolmap/data.geojson'
+    school_file_uri = 'https://s3.amazonaws.com/projects.chicagoreporter.com/graphics/schoolmap/geo_schools.csv'
+} else {
+    data_file_uri = 'viz_data/data.geojson'
+    school_file_uri = 'viz_data/geo_schools.csv'
+}
 
 /*
 *
@@ -95,8 +178,8 @@ var data_configs = {
                                       'color_palette' : ['#fbb4ae','#b3cde3','#ccebc5','#decbe4'],
                                       'html_id'       : 'race',
                                       'hed'           : 'Majority',
-                                      'subhed'        : 'Denotes which race accounts for more than 50 percent of population, if any',
-                                      'chatter'       : 'Following a trend in New York City, Philadelphia and elsewhere, black communities are most affected by public school closures. Three years after Chicago’s mass closures, black neighborhoods are still stuck with the most vacant schools, with xx and xx at the top of the list.'
+                                      'subhed'        : 'Denotes race accounting for more than 50 percent of population, if any',
+                                      'chatter'       : 'Following a trend in New York City, Philadelphia and elsewhere, black communities are most affected by public school closures. Three years after Chicago’s mass closures, black neighborhoods are still stuck with the most vacant schools, with Austin and West Englewood at the top of the list.'
                                      },
                     'hs'     :       {
                                       'properties'    : 'hs_diploma_or_less',
@@ -120,7 +203,7 @@ var data_configs = {
                                       'html_id'       : 'unemployment',
                                       'hed'           : 'Unemployment',
                                       'subhed'        : 'Percent of civilian workforce reported as unemployed between 2010 and 2014',
-                                      'chatter'       : 'High unemployment is an economic burden on black communities that were hit hardest by school closures. Chicago’s black unemployment rate of xx percent drives the statewide rate, which is the highest in the nation.',
+                                      'chatter'       : 'High unemployment is an economic burden on black communities that were hit hardest by school closures. Chicago’s black unemployment rate of 14.7 percent drives the statewide rate, which is among the highest in the nation.',
                                      },
                     'vacancy'      : {
                                       'properties'    : 'vacancy',
@@ -132,7 +215,7 @@ var data_configs = {
                                       'html_id'       : 'vacancy',
                                       'hed'           : 'Vacant homes',
                                       'subhed'        : 'Share of housing stock reported vacant 2010-2014',
-                                      'chatter'       : 'Community activists pointed out in 2013 that black communities were already overburdened with abandoned homes and buildings and didn’t need to add shuttered schools to the mix. That warning has materialized, especially in xx and xx, where residential vacancies are highest.',
+                                      'chatter'       : 'Community activists pointed out in 2013 that black communities were already overburdened with abandoned homes and buildings and didn’t need to add shuttered schools to the mix. That warning has materialized, especially in Englewood and West Garfield Park, where residential vacancies are highest.',
                                      },
                     'poverty'      : {
                                       'properties'    : 'poverty',
@@ -155,7 +238,7 @@ var data_configs = {
                                       'color_palette' : ["#fdbe85","#fd8d3c","#e6550d","#a63603"],
                                       'html_id'       : 'property',
                                       'hed'           : 'Per-capita property crime',
-                                      'subhed'        : 'Includes thefts, burglaries, vandalism, etc. per 100,000 residents',
+                                      'subhed'        : 'Includes thefts, burglaries, vandalism, etc. per 100,000 residents, from September 2015 through August 2016',
                                       'chatter'       : 'Vandalism, theft and similar crimes are far more common in communities with still-vacant closed schools—which have in some cases become magnets for more property crime.',
                                      },
                     'violent'      : {
@@ -167,10 +250,16 @@ var data_configs = {
                                       'color_palette' : ["#fcae91","#fb6a4a","#de2d26","#a50f15"],
                                       'html_id'       : 'violent',
                                       'hed'           : 'Per-capita violent crime',
-                                      'subhed'        : 'Includes batteries, robberies, murders, etc. per 100,000 residents',
+                                      'subhed'        : 'Includes batteries, robberies, murders, etc. per 100,000 residents, from September 2015 through August 2016',
                                       'chatter'       : 'Shootings and other violent crimes are a heavy burden in black and brown communities where schools remain vacant.',
                                      }
 }
+
+
+school_types = [
+                {'label': 'Repurposed school', 'id': 'label-repurposed'},
+                {'label': 'Not repurposed', 'id': 'label-not-repurposed'},
+               ]
 
 
 /*
@@ -208,7 +297,7 @@ var make_legend = function() {
                                                     y  : y_coord,
                                                   }) 
 
-    var legend_hed = legend_element.insert("p")
+    var legend_hed = legend_element.append("p")
                                    .attr({ 
                                           id : "legend_hed",
                                         })
@@ -223,9 +312,12 @@ var make_legend = function() {
                                               id : "legend_item_list"
                                             })
 
+    var school_legend_item_list = legend_element.append("ul")
+                                               .attr({
+                                                      id : "school_legend_item_list"
+                                                    })
 }
 
-make_legend()
 
 var switch_legend = function(color,config,type){
 
@@ -239,13 +331,12 @@ var switch_legend = function(color,config,type){
     d3.selectAll(".legend_label").remove()
     d3.selectAll(".legend_square").remove()
     d3.selectAll(".legend_item").remove()
-    d3.selectAll("#legend_hed").remove()
-    d3.selectAll("#legend_subhed").remove()
 
-    var legend_element   = d3.select("#legend") 
-    var legend_hed       = d3.select("#legend_hed")
-    var legend_subhed    = d3.select("#legend_subhed")
-    var legend_item_list = d3.select("#legend_item_list")
+    var legend_element          = d3.select("#legend") 
+    var legend_hed              = d3.select("#legend_hed")
+    var legend_subhed           = d3.select("#legend_subhed")
+    var legend_item_list        = d3.select("#legend_item_list")
+    var school_legend_item_list = d3.select("#school_legend_item_list")
 
     legend_hed.text(config['hed'])
     legend_subhed.text(config['subhed'])
@@ -282,14 +373,32 @@ var switch_legend = function(color,config,type){
                class : "legend_item",
              })
 
+    var school_legend_items = school_legend_item_list.selectAll("li")
+        .data(school_types)
+        .enter()
+        .append("li")
+        .attr({
+               class : "school_legend_item",
+             })
+
     var legend_squares = legend_items.insert("span")
                                      .attr({
                                             "class" : "legend_square"
                                           })
 
+    var school_legend_squares = school_legend_items.insert("span")
+                                     .attr({
+                                            "id" : function(d) {return d.id}
+                                          })
+
     var legend_labels = legend_items.insert("span")
                                     .attr({
                                            "class" : "legend_label"
+                                         })
+
+    var school_legend_labels = school_legend_items.insert("span")
+                                    .attr({
+                                            "class" : "school_legend_label"
                                          })
 
     var square_attributes = legend_squares.attr({
@@ -300,6 +409,8 @@ var switch_legend = function(color,config,type){
     })
 
     var labels_text = legend_labels.text(function(d){return d.range})
+    
+    var school_labels_text = school_legend_labels.text(function(d){return d.label})
     
 /*
 
@@ -351,6 +462,8 @@ var chatter_box = function() {
 
 chatter_box()
 
+make_legend()
+
 var chatter = function() {
                           d3.select("#chatterbox")
                             .append("p")
@@ -366,7 +479,7 @@ var svg = d3.select("#container").append("svg")
      })    
 
 var projection = d3.geo.mercator()
-    .center([-87.72, 41.89 ])
+    .center([-87.63, 41.89 ])
     .scale([width * 100])
 
 var path = d3.geo.path().projection(projection)
@@ -412,7 +525,7 @@ var demo_switcher = function(config) {
 
 
 
-var map = d3.json("viz_data/data.geojson", function(json) {
+var map = d3.json(data_file_uri, function(json) {
 //var map = d3.json("viz_data/data.topojson", function(json) {
     // get data and shapes
     comm_areas = json.features
@@ -471,7 +584,7 @@ var map = d3.json("viz_data/data.geojson", function(json) {
     * put the schools on 
     *
     */
-    var schools = d3.csv("viz_data/geo_schools.csv", function(csv) {
+    var schools = d3.csv(school_file_uri, function(csv) {
         svg.selectAll("circle")
         .data(csv)
         .enter()
@@ -480,7 +593,7 @@ var map = d3.json("viz_data/data.geojson", function(json) {
         .attr("cy", function(d) {return projection([d.lon,d.lat])[1]})
         .attr("r", "5px")
         .attr("class","schools")
-        .attr("fill", function(d) { return school_fill(d['Repurposed?'])}) // TODO: fill color based on repurpose
+        .attr("class", function(d) { return school_fill(d['Repurposed?'])}) // TODO: fill color based on repurpose
         }
     )
 
@@ -489,9 +602,9 @@ var map = d3.json("viz_data/data.geojson", function(json) {
 var school_fill = function(repurpose) {
 //
     if (repurpose == 'yes') {
-        return "blue"} 
+        return "schools-repurposed"} 
     else {
-        return "#AAAAAA"}
+        return "schools-not-repurposed"}
 }
 
 
