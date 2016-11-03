@@ -12,6 +12,12 @@ body, svg {
            width      : 320px;
 }
 
+#intro {
+        text-align : left;
+        font-size  : 15px;
+        margin-bottom: -20px;
+       }
+
 svg { 
      text-align: center;
     }
@@ -63,7 +69,6 @@ svg {
                }
 
 #legend_item_list, #school_legend_item_list {
-                   margin-top : -5px;
                    list-style : none;
                   }
 
@@ -95,7 +100,6 @@ svg {
 
 #chatterbox {
              text-align    : left;
-             height        : 140px;
              padding-left  : 10px;
              padding-right : 10px;
              font-size     : 15px;
@@ -133,6 +137,13 @@ svg {
              border-radius: 10px;
              margin-right: 3px;
 }
+
+
+#sources {
+        text-align : left;
+        font-size  : 12px;
+       }
+
 </style>
 </head>
 <body>
@@ -189,7 +200,7 @@ var data_configs = {
                                       'color_palette' : ['#fbb4ae','#b3cde3','#ccebc5','#decbe4'],
                                       'html_id'       : 'race',
                                       'hed'           : 'Majority',
-                                      'subhed'        : 'Denotes race accounting for more than 50 percent of population, if any',
+                                      'subhed'        : 'Population 50 percent or more of one race; mixed indicates no majority race',
                                       'chatter'       : 'Following a trend in New York City, Philadelphia and elsewhere, black communities are most affected by public school closures. Three years after Chicago’s mass closures, black neighborhoods are still stuck with the most vacant schools, with Austin and West Englewood at the top of the list.'
                                      },
                     'hs'     :       {
@@ -201,7 +212,7 @@ var data_configs = {
                                       'color_palette' : ["rgb(186,228,179)","rgb(116,196,118)", "rgb(49,163,84)","rgb(0,109,44)"],
                                       'html_id'       : 'hs',
                                       'hed'           : 'No college',
-                                      'subhed'        : 'Denotes percent of population attaining up to high school diploma or GED',
+                                      'subhed'        : 'Percent of residents with only high school diploma, GED or less',
                                       'chatter'       : 'Parents with less education are often the most eager to make sure their children have access to good schools. Communities in which adults often lack even a high school diploma, however, lost the most schools and end up stuck with vacant buildings.',
                                      },
                     'unemployment' : {
@@ -237,7 +248,7 @@ var data_configs = {
                                       'color_palette' : ["#d7b5d8","#df65b0","#dd1c77","#980043"],
                                       'html_id'       : 'poverty',
                                       'hed'           : 'Poverty',
-                                      'subhed'        : 'Population living underneath federal poverty level',
+                                      'subhed'        : 'Population living below federal poverty line',
                                       'chatter'       : 'Communities with high poverty rates lost the most schools—and the stability and resources those schools could bring to help families and children break out of poverty.',
                                      },
                     'property'     : {
@@ -272,6 +283,8 @@ school_types = [
                 {'label': 'Not repurposed', 'id': 'label-not-repurposed'},
                ]
 
+var intro_text = "<strong>Explore the demographics of communities affected by the 2013 school closings.</strong>"
+
 
 /*
 *
@@ -287,6 +300,13 @@ var container = d3.select("body")
                   .attr({
                          id : "container",
                        })
+
+var intro = d3.select("#container")
+              .append("div")
+              .attr({
+                     id : "intro",
+                   })
+              .html(intro_text)
 
 // set up the list of demographic pickers
 var picker = d3.select("#container")
@@ -641,5 +661,14 @@ var rangify = function(tuple) {
 }
 
 chatter_box()
+
+
+    source_text = "<hr />Race, education, home vacancy and poverty data compiled from 2014 American Community Survey 5-year data. Crime records reported by Chicago Police Department between September 2015 through August 2016."
+
+var sources = container.append("div")
+                       .attr({
+                              id : "sources"
+                            })
+                       .html(source_text)
 
 </script>
