@@ -294,6 +294,7 @@ var intro_text = "<strong>Explore the demographics of communities affected by th
 
 var width = 320
     height = 530
+    map_ratio = 175 
 
 var container = d3.select("body")
                   .append("div")
@@ -441,40 +442,6 @@ var switch_legend = function(color,config,type){
     
     var school_labels_text = school_legend_labels.text(function(d){return d.label})
     
-/*
-
-    var legend_squares = legend_items.select("div")
-                                     .data(data.items)
-                                     .enter()
-                                     .append("div")
-                                     .attr({
-                                            class : "legend_squares"
-                                          })
-    /*
-
-    var square_attributes = squares.attr({
-        class      : 'legend_label',
-        background : function(d) { return d.shade},
-        height     : height,
-        width      : width,
-    })
-    
-    var labels = legend_element.selectAll("#label")
-        .data(data.items)
-        .enter()
-        .append("text")
-        .attr("id","label")
-
-    var label_attributes = labels.attr({
-        class       : 'legend_label',
-        y           : function(d) { return d.y + height},
-        x           : x_coord + 20,
-        'font-size' : '10px'
-    })
-
-    var labels_text = labels.text(function(d){return d.range})
-    
-*/
 }
 
 
@@ -508,7 +475,7 @@ var svg = d3.select("#container").append("svg")
 
 var projection = d3.geo.mercator()
     .center([-87.36, 41.84 ])
-    .scale([width*175])
+    .scale([width*map_ratio])
 
 var path = d3.geo.path().projection(projection)
 
@@ -670,5 +637,29 @@ var sources = container.append("div")
                               id : "sources"
                             })
                        .html(source_text)
+
+// testing responsive resizing
+d3.select(window).on('resize', resize);
+
+function resize() {
+    // adjust things when the window size changes
+    width = parseInt(d3.select('#container').style('width'));
+    //width = width - margin.left - margin.right;
+    height = width * map_ratio;
+
+    // update projection
+    projection
+        .translate([width / 2, height / 2])
+        .scale(width);
+
+    // resize the map container
+    container
+        .style('width', width + 'px')
+        .style('height', height + 'px');
+
+    // resize the map
+    container.select('.cas').attr('d', path);
+    console.log(height, width)
+}
 
 </script>
