@@ -1,0 +1,63 @@
+#mapcontainer, #tablecontainer {
+    height: 500px;
+    width: 80%;
+    margin-left: 10%;
+    position: relative;
+}
+
+#map {
+    height: 100%;
+    width: 62%;
+    position: absolute;
+}
+
+#infobox {
+    position: absolute; 
+    right: 0px; 
+    background: #EEEEEE; 
+    z-index: 1; 
+    width: 38%; 
+    height: 100%;
+}
+
+#infobox ul {
+    list-style-type: none; 
+}
+
+#legend {
+    position: absolute; 
+    bottom: 0px;
+    z-index: 1; 
+    width: 100%; 
+}
+
+#legend ul {
+    list-style-type: none; 
+    margin: 10px; 
+    font-size: 12px; 
+    font-weight: bold;
+}
+
+#legend img {
+    margin-right: 10px; 
+    vertical-align: baseline;
+}
+
+#legend p {
+    font-size: 10px; 
+    line-height: 14px;
+    margin-left: 10px; 
+    margin-right: 10px; 
+    margin-bottom: 10px;
+}
+
+#divider {
+    width: 80%;
+    margin-left: 10%;
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+#schools-table {
+    width: 80%;
+}

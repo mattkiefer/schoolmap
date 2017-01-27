@@ -1,0 +1,13 @@
+
+school icon:
+    noun_480119_cc.svg
+
+school icon attribution:
+    <a href="https://thenounproject.com/search/?q=school&i=480119">School</a> icon by David from <a href="https://thenounproject.com">the Noun Project</a>
+
+school colors by status:
+    unsold     | orange    | #d95f02
+    sold       | green     | #1b9e77
+    repurposed | purple    | #7570b3
+
+

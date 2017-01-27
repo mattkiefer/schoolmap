@@ -1,0 +1,2 @@
+# how to flyTo new center
+mbmap.flyTo({center:[lon+.04,lat],zoom:mapMaxZoom})
