@@ -1,16 +1,19 @@
 /* config start */
-prod = false;
-prod_data_url = "https://s3.amazonaws.com/projects.chicagoreporter.com/graphics/newschoolmap/test2.geojson";
+prod = true;
+prod_data_url = "https://s3.amazonaws.com/projects.chicagoreporter.com/graphics/newschoolmap/geo_schools.geojson";
 test_data_url = "geo_schools.geojson";
 mapboxgl.accessToken = 'pk.eyJ1IjoibWF0dGhld2xraWVmZXIiLCJhIjoiY2l4MGxscGY5MDFkMDJ0bzBvZTE5Ym1wMyJ9.iBxJV6lSLtj4iRf7n-VQDg';
 var mbStyleURL = 'mapbox://styles/matthewlkiefer/ciy1vzzn600792rqj7de09u8q' // </3
-var mapCenter = [-87.55, 41.8195]
-var mapZoom = 9.5
-var mapMinZoom = 9.5
-var mapMaxZoom = 15
+var mapCenter = [-87.63, 41.8195]
+var mapZoom = 10
+var mapMinZoom = 10
+var mapMaxZoom = 16
+var mapReady = false;
+var tableReady = false;
 /* config end */
 
 
+// test or prod
 if (prod) {
     data_url = prod_data_url;
 } else {
@@ -48,17 +51,20 @@ makeMap = function(jdata) {
     mbmap.on('click', function (e) {
             var features = mbmap.queryRenderedFeatures(e.point,{layers:['sold','for sale','repurposed']})
                 if (features.length) {  
-                    render_properties(features[0].properties);
+                    // TODO: abstract this
+                    school = features[0]
+                    window.location.hash = school.properties.slug;
+                    render_properties(school.properties);
+                    zoomCenterInfo(school);
             }
         }
     )
-
-
     mbmap.on('load', function(e) {
         mbmap.addSource('places', {
             type: 'geojson',
             data: jdata, 
         });
+        mbmap.addControl(new mapboxgl.NavigationControl());
         jdata.features.forEach(function(school) {
             var school_status = school.properties['status'];
             var symbol = status_icons[school_status];
@@ -76,12 +82,23 @@ makeMap = function(jdata) {
                 })
             }
         });
+    glideToMap();
+    hashHandler();
+    displayInstructions();
     });
     makeTable(jdata.features);
     listen = true;
-    hashHandler();
+    mapReady = true;
+    checkReady();
 };
 
+displayInstructions = function() {
+    if (!window.location.hash.length) {
+        infobox = $('#infobox')[0];
+        $('#legend').before($("<p>").attr("id","instructions")); 
+        $('#instructions')[0].innerHTML = 'Select a school by location or <a href="#table-anchor">name</a>.';    
+    }
+}
 
 makeTable = function(schools) {
     table_data = buildArray(schools);
@@ -89,13 +106,15 @@ makeTable = function(schools) {
         $('#schools-table').DataTable({
             data:table_data,
             columns: [
-                    {title:"school"},
-                    {title:"address"},
-                    {title:"community area"},
-                    {title:"status"},
+                    {title:"School"},
+                    {title:"Address"},
+                    {title:"Community area"},
+                    {title:"Status"},
             ],
             bPaginate: false,
             bInfo: false,
+            bAutoWidth: true,
+            initComplete: function(){tableReady=true;checkReady();},
         });
     });
 };
@@ -112,13 +131,24 @@ buildArray = function(schools) {
     return data;
 }
 
+// force things to fit in wordpress post
+crowBar = function(){
+    $(".entry-content").height(
+        $("#map").height() + $("#schools-table").height() + $("#chatter").height() + 400
+    );
+}
+
+checkReady = function(){
+    if (mapReady && tableReady) {
+        crowBar();
+    }
+}
 
 hashHandler = function() {
-    debugger;
     hash = document.location.hash.replace("#","");
+    if (hash=='map-anchor'){return}
     if (hash.length && listen) {
         school = lookupSchool(hash);   
-//        goToTop(hash);
         zoomCenterInfo(school);
     }
 }
@@ -144,54 +174,119 @@ zoomCenterInfo = function(school){
 window.addEventListener("hashchange",hashHandler,false);
 
 
-render_properties = function(properties) {
-    //glide to map
+glideToMap = function(){
     $('html, body').animate({
-        scrollTop: $("#map-anchor").offset().top
+        scrollTop: $("#map").offset().top - 100
     }, 1000);
+}
+
+
+resetMapInfo = function(){
+    $("#xout").remove();
+    window.location.hash = ''
+    if ($("#school-listing")){$("#school-listing").remove();};
+    displayInstructions() 
+    mbmap.flyTo({
+        center: mapCenter,
+        zoom: mapZoom,
+        speed: 1,
+    })
+}
+
+
+render_properties = function(properties) {
+    glideToMap();
     // infobox should include ul of data
     // and also ul of legend elements
     // ... so just empty() the data
     infobox = $('#infobox');
+    if ($("#instructions")){$("#instructions").remove();};
     $('#legend').before($("<ul>").attr("id","school-listing"));
     schoolListing = $("#school-listing")
     schoolListing.empty();
-    
-    // well! coulda done this neater ...
+
+    if ($("#xout")){$("#xout").remove();};
+    $("#school-listing").before($("<h1>").attr("id","xout"));
+    $('#xout')[0].innerHTML = "<a href='#map-anchor'>&#x02A02</a>";
+    $('#xout').on("click", function() {resetMapInfo()})
+
     $("<li>").attr("id","school-name").appendTo(schoolListing);
-    $("#school-name")[0].innerText = properties['name'];
+    $("#school-name")[0].innerHTML = '<h1>' + properties['name'] + '</h1>';
     
+    if (properties['img']) {
+        $("<li>").attr("id","school-pic").appendTo(schoolListing);
+        $("#school-pic")[0].innerHTML = '<img src="' + properties['img'] + '" />';
+    }
+
+    $('#legend').before($("<ul>").attr("id","school-listing"));
+
     $("<li>").attr("id","school-address").appendTo(schoolListing);
-    $("#school-address")[0].innerText = properties['address'];
-    
-    $("<li>").attr("id","school-commarea").appendTo(schoolListing);
-    $("#school-commarea")[0].innerText = properties['comm_area'];
-    
-    $("<li>").attr("id","school-status").appendTo(schoolListing);
-    $("#school-status")[0].innerText = properties['status'];
-    
-    $("<li>").attr("id","school-usage").appendTo(schoolListing);
-    $("#school-usage")[0].innerText = properties['usage'];
-
-    $("<li>").attr("id","school-saledoc").appendTo(schoolListing);
-    $("#school-saledoc")[0].innerText = properties['sale_doc'];
-
-    $("<li>").attr("id","school-repurposedoc").appendTo(schoolListing);
-    $("#school-repurposedoc")[0].innerText = properties['repurpose_doc'];
-    
+    $("#school-address")[0].innerText = properties['address'] + " (" + properties['comm_area'] + ")";
+ 
     $("<li>").attr("id","school-alderman").appendTo(schoolListing);
     $("#school-alderman")[0].innerText = properties['alderman'];
     
-    $("<li>").attr("id","school-saledate").appendTo(schoolListing);
-    $("#school-saledate")[0].innerText = properties['sale_date'];
-    
-    $("<li>").attr("id","school-buyer").appendTo(schoolListing);
-    $("#school-buyer")[0].innerText = properties['buyer'];
-   
-    $("<li>").attr("id","school-price").appendTo(schoolListing);
-    $("#school-price")[0].innerText = properties['price'];
 
-    console.log(properties)
+    //docs    
+    $("<li>").attr("id","school-docs").appendTo(schoolListing);
+    status_doc = null;
+    if (properties['status_doc'].length) {
+        $("#school-docs")[0].innerHTML = "<a href='" + properties['status_doc'] + "'>Status doc</a> &#124; ";
+    }
+    $("#school-docs")[0].innerHTML += "<a href='" + properties['repurpose_doc'] + "'>Repurposing doc</a>";
+    
+
+    //narratives
+    $("<li>").attr("id","school-narrative").appendTo(schoolListing);
+    $("#school-narrative")[0].innerText = properties['narrative'];
+
+    //share
+    $("<li>").attr("id","school-share").appendTo(schoolListing);
+    $("<span>").attr("id","school-tweet").appendTo($("#school-share"));
+    tweet_text = "What's happened to " + properties['name'] + " school since CPS closed it in 2013? "
+    tweet_text += window.location.href
+    tweet_text += ' via @chicagoreporter'
+    twttr.widgets.createShareButton(
+        '/',
+        document.getElementById('school-tweet'),
+        {text: tweet_text,}
+    );
+
+    $("<span>").attr("id","fb-share-button").appendTo($("#school-share"));
+    $("#fb-share-button")[0].innerHTML = "<a href='#'>Share</a>";
+    $("#fb-share-button").on("click", function() {
+        FB.ui({
+            method: 'share',
+            href: 'http://chicagoreporter.com',
+            quote: tweet_text,
+            layout: 'button',
+        }, function(response){}
+        )
+    });
+
+    resize = false;
+    // resize text if too long
+    // TODO: fix way we measure share button height
+    while($("#school-share").offset().top + 50 > $("#legend").children('hr').offset().top) {
+        size = parseInt($("#school-address").css("font-size"),10);
+        debug_data = {'school-share.top':$("#school-share").offset().top,'school-share.height':$("#school-share").height(), 'legend.top': $("#legend").children('hr').offset().top,'size':size}
+        $("#school-address").css("font-size",size-1);
+        $("#school-alderman").css("font-size",size-1);
+        $("#school-docs").css("font-size",size-1);
+        $("#school-narrative").css("font-size",size-1);
+        console.log(debug_data)
+        console.log($("#school-share").offset().top + 50 > $("#legend").children('hr').offset().top)
+        console.log([$("#school-share").offset().top, 50, $("#legend").children('hr').offset().top])
+    }
+
+    //TODO: fix infinite recursion 
+    /*
+    while($("#school-name").offset().left + $("#school-name").parent()[0].scrollWidth > $("#infobox").offset().left + $("#infobox").width()){
+        hedsize = parseInt($("#school-name").css("font-size"),10);
+        $("#school-name").css("font-size",hedsize-1);
+        console.log('resize hed');
+    }
+    */
 }
 
 

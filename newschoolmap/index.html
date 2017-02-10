@@ -5,24 +5,65 @@
 <div id="map"></div>
 <div id="infobox">
 <div id="legend">
+<hr />
 <ul id="key">
     <li><img src="http://chicagoreporter.com/wp-content/uploads/2017/01/unsold_school-15.png" />For sale</li>
     <li><img src="http://chicagoreporter.com/wp-content/uploads/2017/01/sold_school-15.png" />Sold</li>
     <li><img src="http://chicagoreporter.com/wp-content/uploads/2017/01/repurposed_school-15.png" />Repurposed</li>
 </ul>
+</div>
+</div>
+</div>
+<p id="credit">
 <a href="https://thenounproject.com/search/?q=school&amp;i=480119">School</a> icon by David from <a href="https://thenounproject.com">the Noun Project</a>
-</div>
-</div>
-</div>
+</p>
 <hr id="divider" />
 <div id="tablecontainer">
+<a name="table-anchor"></a>
 <table id="schools-table"></table>
 </div>
 <!-- MAP PLACEMENT CODE ENDS HERE -->
 
 
 <!-- EVERYTHING BELOW THIS LINE CAN GO AFTER THE STORY POST -->
-<script src='https://api.mapbox.com/mapbox-gl-js/v0.31.0/mapbox-gl.js'></script>
+
+<script>window.twttr = (function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0],
+    t = window.twttr || {};
+  if (d.getElementById(id)) return t;
+  js = d.createElement(s);
+  js.id = id;
+  js.src = "https://platform.twitter.com/widgets.js";
+  fjs.parentNode.insertBefore(js, fjs);
+
+  t._e = [];
+  t.ready = function(f) {
+    t._e.push(f);
+  };
+
+  return t;
+}(document, "script", "twitter-wjs"));</script>
+
+<script>
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '272233419873752',
+      xfbml      : true,
+      version    : 'v2.8'
+    });
+    FB.AppEvents.logPageView();
+  };
+
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "//connect.facebook.net/en_US/sdk.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
+</script>
+
+<script src='https://api.mapbox.com/mapbox-gl-js/v0.28.0/mapbox-gl.js'></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.13/css/jquery.dataTables.css">
 <script type="text/javascript" charset="utf8" src="//cdn.datatables.net/1.10.13/js/jquery.dataTables.js"></script>

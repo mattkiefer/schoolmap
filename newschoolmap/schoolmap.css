@@ -1,7 +1,6 @@
 #mapcontainer, #tablecontainer {
-    height: 500px;
-    width: 80%;
-    margin-left: 10%;
+    //height: 500px;
+    height: 700px;
     position: relative;
 }
 
@@ -9,6 +8,17 @@
     height: 100%;
     width: 62%;
     position: absolute;
+}
+
+#xout {
+    background-color: #484848;
+    padding: 10px;
+    margin: 0px;
+}
+
+#xout a, #fb-share-button a {
+    color: white;
+    text-decoration: none;
 }
 
 #infobox {
@@ -33,9 +43,14 @@
 
 #legend ul {
     list-style-type: none; 
-    margin: 10px; 
     font-size: 12px; 
     font-weight: bold;
+    text-align: center;
+}
+
+#legend li {
+    margin: 5%;
+    display: inline-block;
 }
 
 #legend img {
@@ -43,12 +58,12 @@
     vertical-align: baseline;
 }
 
-#legend p {
-    font-size: 10px; 
-    line-height: 14px;
-    margin-left: 10px; 
-    margin-right: 10px; 
-    margin-bottom: 10px;
+
+#key {
+    margin-bottom: 11px;
+}
+
+#credit {
 }
 
 #divider {
@@ -58,6 +73,57 @@
     margin-bottom: 50px;
 }
 
-#schools-table {
+
+#school-listing {
+    margin-left: 5%;
+    margin-right: 5%;
+    padding: 0px;
+}
+
+#school-listing li{
+    font-size: 14px;
+    margin-bottom: 3px;
+}
+
+#instructions {
+    padding-top: 70%; 
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+#school-name h1 {
+    margin-top: 0px;
+    margin-bottom: 7px;
+}
+
+#school-pic img {
     width: 80%;
 }
+
+#school-address {
+    padding-top: 8px;
+}
+
+#school-narrative {
+    padding-top: 5px;
+    padding-bottom: 10px;
+}
+
+#fb-share-button {
+    color: white;
+    background-color: #4267B2;
+    border-radius: 3px;
+    font-size: 0.9em;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 2px;
+    padding-bottom: 1px;
+    position: relative;
+    float: right;
+}
+
+
+#schools-table {
+}
+
