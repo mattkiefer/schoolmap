@@ -155,7 +155,12 @@ hashHandler = function() {
 
 
 lookupSchool = function(hash) {
-    return jdata.features.find(s=>s.properties.slug==hash);
+    hashLookup = function(element) {
+       return element.properties.slug == hash;
+    }
+    //doesn't work on desktop safari ...
+    //return jdata.features.find(s=>s.properties.slug==hash);
+    return jdata.features.find(hashLookup);
 }
 
 
