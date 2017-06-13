@@ -75,7 +75,9 @@ def build_narrative(school):
         sale_narr += ' for '
         sale_narr += dollarify(school['price'])
         narrative += sale_narr
+        narrative += ' '
     narrative += school['usage']
+    narrative += ' '
     narrative += school['notes']
     return narrative
 

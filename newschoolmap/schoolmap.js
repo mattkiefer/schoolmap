@@ -1,5 +1,5 @@
 /* config start */
-prod = true;
+prod = false;
 prod_data_url = "https://s3.amazonaws.com/projects.chicagoreporter.com/graphics/newschoolmap/geo_schools.geojson";
 test_data_url = "geo_schools.geojson";
 mapboxgl.accessToken = 'pk.eyJ1IjoibWF0dGhld2xraWVmZXIiLCJhIjoiY2l4MGxscGY5MDFkMDJ0bzBvZTE5Ym1wMyJ9.iBxJV6lSLtj4iRf7n-VQDg';

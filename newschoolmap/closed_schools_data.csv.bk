@@ -1,44 +1,44 @@
-address,closed_school,community_area,status,usage,sale_doc,repurpose_doc,alderman,sale_date,buyer,price,lat,lon
-5345 W Congress Pkwy,"Armstrong, L",Austin,for sale,,,,,,,,41.87381146,-87.75833836
-5055 S State St,Attucks,Grand Boulevard,for sale,,,,,,,,41.80275613,-87.62581982
-1241 W 58th St,Bontemps,West Englewood,for sale,,,,,,,,41.78859393,-87.65619544
-9207 S Phillips Ave,Buckingham,Calumet Heights,for sale,,,,,,,,41.72799449,-87.56445587
-1903 E 96th St,Burnham,South Deering,for sale,,,,,,,,41.72052706,-87.5772024
-2833 W Adams St,Calhoun,East Garfield Park,for sale,,,,,,,,41.87824635,-87.69703159
-4959 S Blackstone Ave,Canter,Kenwood,repurposed,,,,,,,,41.80499706,-87.59046431
-1726 W Berteau Ave,Courtenay,Lake View,for sale,,,,,,,,41.95799386,-87.67208151
-2306 W Maypole Ave,Dett,Near West Side,for sale,,,,,,,,41.88397134,-87.68545525
-2651 W Washington Blvd,Dodge,East Garfield Park,repurposed,,,,,,,,41.8828569,-87.69189043
-2722 S King Dr,Drake,Douglas,sold,,,,,,,,41.84418167,-87.61734935
-2620 W Hirsch St,DuPrey/Von Humboldt,West Town,sold,,,,,,,,41.90669947,-87.69336871
-6121 S Hermitage Ave,Earle,West Englewood,for sale,,,,,,,,41.78268772,-87.66784268
-5500 W Madison St,Emmet,Austin,for sale,,,,,,,,41.8803579,-87.76319765
-6145 S Ingleside Ave,Fiske,Woodlawn,for sale,,,,,,,,41.78340435,-87.60266185
-4257 W Adams St,Goldblatt,West Garfield Park,for sale,,,,,,,,41.87781884,-87.7312355
-1326 S Avers Ave,Henson,North Lawndale,for sale,,,,,,,,41.86389978,-87.72153764
-517 N Parkside Ave,Key,Austin,for sale,,,,,,,,41.8895825,-87.76638187
-740 S Campbell Ave,King,Near West Side,for sale,,,,,,,,41.87198544,-87.6887024
-10414 S State St,Kohn*,Roseland,for sale,,,,,,,,41.70484867,-87.62354503
-2714 W Augusta Blvd,Lafayette,West Town,repurposed,,,,,,,,41.89938543,-87.69486959
-5221 W Congress Pkwy,Leland,Austin,sold,,,,,,,,41.87384772,-87.75536999
-230 N Kolmar Ave,Marconi,West Garfield Park,sold,,,,,,,,41.88417497,-87.73930127
-838 W Marquette Rd,Mays,Englewood,for sale,,,,,,,,41.77254411,-87.64588807
-412 S Keeler Ave,Melody,West Garfield Park,for sale,,,,,,,,41.87514467,-87.73047378
-8407 S Kerfoot Ave,Morgan,Auburn Gresham,for sale,,,,,,,,41.7414207,-87.64028153
-739 N Ada St,Near North,West Town,sold,,,,,,,,41.8951289,-87.66128832
-221 E 49th St,Overton,Grand Boulevard,sold,,,,,,,,41.80558257,-87.62094879
-12450 S State St,Owens,West Pullman,repurposed,,,,,,,,41.6682904,-87.62241035
-2221 S Lawndale Ave,Paderewski,South Lawndale,for sale,,,,,,,,41.85100287,-87.71732445
-245 W 51st St,Parkman,Fuller Park,for sale,,,,,,,,41.80171768,-87.63285322
-1444 W Augusta Blvd,Peabody,West Town,sold,,,,,,,,41.89985353,-87.66393278
-3113 S Rhodes Ave,Pershing,Douglas,for sale,,,,,,,,41.83837169,-87.61340748
-1852 S Albany Ave,Pope,North Lawndale,repurposed,,,,,,,,41.85594125,-87.70294107
-6059 S Wabash Ave,Ross,Washington Park,for sale,,,,,,,,41.78448604,-87.6237288
-11725 S Perry Ave,Songhai,West Pullman,for sale,,,,,,,,41.68097156,-87.62511708
-4525 N Kenmore Ave,Stewart,Uptown,sold,,,,,,,,41.96500309,-87.65609546
-5200 N Ashland Ave,Trumbull,Edgewater,sold,,,,,,,,41.97618537,-87.66970435
-410 N Monticello Ave,"Ward, L ",Humboldt Park,for sale,,,,,,,,41.88983044,-87.71740163
-6950 S Sangamon St,Wentworth,Englewood,for sale,,,,,,,,41.76765354,-87.64820843
-11941 S Parnell Ave,West Pullman,West Pullman,for sale,,,,,,,,41.67689685,-87.63577072
-6206 S Racine Ave,Woods,West Englewood,for sale,,,,,,,,41.78133513,-87.65463754
-7025 S Princeton Ave,Yale,Greater Grand Crossing,for sale,,,,,,,,41.76608577,-87.63214283
+address,closed_school,community_area,status,usage,status_doc,repurpose_doc,alderman,board_approval_date,buyer,price,notes,lat,lon,img
+5345 W Congress Pkwy,"Armstrong, Louis",Austin,for sale,Use restriction: Cannot be used as K-12 charter school.,armstrong_status.pdf,armstrong_repurposing.pdf,Chris Taliaferro,,,,,41.87381146,-87.75833836,armstrong 1
+5055 S State St,Attucks,Grand Boulevard,for sale,"Use restriction: Must be used as youth/adult recreational, educational, counseling or mentoring program; career, trade and business training program; housing; retail; or manufacturing/tech space. Cannot be used as K-12 charter school or to sell/produce liquor.",attucks_status.pdf,attucks_repurposing.pdf,Pat Dowell,,,,,41.80275613,-87.62581982,attucks
+1241 W 58th St,Bontemps,West Englewood,for sale,Use restriction: Cannot be used as K-12 charter school.,bontemps_status.pdf,bontemps_repurposing.pdf,Toni Foulkes,,,,,41.78859393,-87.65619544,bontemps 3
+9207 S Phillips Ave,Buckingham,Calumet Heights,for sale,Use restriction: Cannot be used as K-12 charter school.,buckingham_status.pdf,buckingham_repurposing.pdf,Greg Mitchell,,,,,41.72799449,-87.56445587,buckingham 3
+1903 E 96th St,Burnham,South Deering,for sale,Use restriction: Cannot be used as K-12 charter school.,burnham_status.pdf,burnham_repurposing.pdf,Greg Mitchell,,,,Burnham's main building and branch are being sold separately.,41.72052706,-87.5772024,burnham and anthony branch 2
+2833 W Adams St,Calhoun,East Garfield Park,for sale,"Use restriction: Must be used as housing. Gym and auditorium must be preserved and made available for community programming and partnerships. Cannot be used as any kind of K-12 school or for commercial, retail or industrial development. Owner must provide and maintain a playground for neighborhood children.",calhoun_status.pdf,calhoun_repurposing.pdf,Walter Burnett,,,,,41.87824635,-87.69703159,calhoun 3
+4959 S Blackstone Ave,Canter,Kenwood,repurposed,Reused by Chicago Public Schools as Kenwood Academic Center.,canter_status.pdf,canter_repurposing.pdf,Sophia King,,,,,41.80499706,-87.59046431,canter 2
+1726 W Berteau Ave,Courtenay,Lake View,for sale,Use restriction: Cannot be used as K-12 charter school.,courtenay_status.pdf,courtenay_repurposing.pdf,Ameya Pawar,,,,,41.95799386,-87.67208151,courtenay 2
+2306 W Maypole Ave,Dett,Near West Side,for sale,"Use restriction: Gym, auditorium, stage, kitchen, lunchroom and library must be preserved and made available for community programs and partnerships. Cannot be used as any kind of K-12 school, residential housing or for industrial use that stores chemicals or hazardous substances.",dett_status.pdf,dett_repurposing.pdf,Walter Burnett,,,,,41.88397134,-87.68545525,dett 3
+2651 W Washington Blvd,Dodge,East Garfield Park,repurposed,Reused by Chicago Public Schools as administrative space. ,dodge_status.pdf,dodge_repurposing.pdf,Walter Burnett,,,,,41.8828569,-87.69189043,dodge 2
+2722 S King Dr,Drake,Douglas,sold,"Will become union hall, credit union and trades program. Use restriction: Must be used as administrative offices and meeting space and vocational/trades training and mentor programs. Part of building may be used for community programming and/or credit union.",drake_status.pdf,drake_repurposing.pdf,Sophia King,2/24/2016,Local 134 of the International Brotherhood of Electrical Workers,"$1,500,000",,41.84418167,-87.61734935,drake 2
+2620 W Hirsch St,DuPrey/Von Humboldt,West Town,sold,Main building will become mixed-use community for teachers. Use restriction: All or part of building must be used for housing existing/retired public school teachers; educational programs; office space; day care programs; or cafe.,duprey_status.pdf,duprey_repurposing.pdf,Proco Joe Moreno,7/22/2015,IFF Von Humboldt,"$3,100,000",Annex and adjoining playground to be sold to Puerto Rican Cultural Center for $1 and converted into a day care center.,41.90669947,-87.69336871,de duprey von humboldt 1
+6121 S Hermitage Ave,Earle,West Englewood,for sale,Use restriction: Cannot be used as a K-12 charter school. ,earle_status.pdf,earle_repurposing.pdf,Raymond Lopez,,,,,41.78268772,-87.66784268,earle 2
+5500 W Madison St,Emmet,Austin,for sale,Use restriction: Cannot be used as a K-12 charter school. ,emmet_status.pdf,emmet_repurposing.pdf,Chris Taliaferro,,,,,41.8803579,-87.76319765,emmet 2
+6145 S Ingleside Ave,Fiske,Woodlawn,for sale,Use restriction: Cannot be used as a K-12 charter school. ,fiske_status.pdf,fiske_repurposing.pdf,Willie Cochran,,,,,41.78340435,-87.60266185,fiske 2
+4257 W Adams St,Goldblatt,West Garfield Park,for sale,Use restriction: Cannot be used as a K-12 charter school. ,goldblatt_status.pdf,goldblatt_repurposing.pdf,Jason Ervin,,,,,41.87781884,-87.7312355,goldblatt 2
+1326 S Avers Ave,Henson,North Lawndale,for sale,Use restriction: Cannot be used as a K-12 charter school. ,henson_status.pdf,henson_repurposing.pdf,Michael Scott,,,,,41.86389978,-87.72153764,henson 3
+517 N Parkside Ave,Key,Austin,for sale,Use restriction: Cannot be used as a K-12 charter school. ,key_status.pdf,key_repurposing.pdf,Chris Taliaferro,,,,,41.8895825,-87.76638187,key 2
+740 S Campbell Ave,King,Near West Side,for sale,Use restriction: Cannot be used as a K-12 charter school. ,king_status.pdf,king_repurposing.pdf,Jason Ervin,,,,,41.87198544,-87.6887024,king 2
+10414 S State St,Kohn,Roseland,for sale,"Use restriction: All or part of building must be used for educational purposes; early childhood development; youth/adult services; job training; retail; tech space; storage; or light manufacturing. Cannot be used for residential housing; storing/recycling waste; selling/making liquor, firearms, drugs or hazardous substances.",kohn_status.pdf,kohn_repurposing.pdf,Carrie Austin,,,,Kohn was put up for public bid in July 2016. District officials say they are still evaluating the responses.,41.70484867,-87.62354503,kohn 2
+2714 W Augusta Blvd,Lafayette,West Town,repurposed,"Reused by Chicago Public Schools as Chicago High School for the Arts, a contract school.",lafayette_status.pdf,lafayette_repurposing.pdf,Roberto Maldonado,,,,,41.89938543,-87.69486959,lafayette 2
+5221 W Congress Pkwy,Leland,Austin,sold,"Used for youth programs, tutoring and counseling. Use restriction: Must be used for youth programming, including extracurricular educational programs; counseling; job readiness/computer training; mentorship/tutoring programs; and/or athletic programs. Site may also incorporate early childhood programs and/or day care.",leland_status.pdf,leland_repurposing.pdf,Chris Taliaferro,3/23/2016,Kidz Express,"$201,065",,41.87384772,-87.75536999,leland 2
+230 N Kolmar Ave,Marconi,West Garfield Park,sold,"Used by Camelot Academy Garfield Park, an alternative school for students at risk of dropping out, and for Chicago Park District programming. Use restriction: All or part of the building must be used as a K-12 alternative or options school.",marconi_status.pdf,marconi_repurposing.pdf,Jason Ervin,12/17/2014,United for Better Living,"$100,000",,41.88417497,-87.73930127,marconi 4
+838 W Marquette Rd,Mays,Englewood,for sale,Use restriction: Cannot be used as a K-12 charter school. ,mays_status.pdf,mays_repurposing.pdf,Roderick Sawyer,,,,,41.77254411,-87.64588807,
+412 S Keeler Ave,Melody,West Garfield Park,for sale,Use restriction: Cannot be used as a K-12 charter school. ,melody_status.pdf,melody_repurposing.pdf,Jason Ervin,,,,,41.87514467,-87.73047378,melody 2
+8407 S Kerfoot Ave,Morgan,Auburn Gresham,for sale,Use restriction: Cannot be used as a K-12 charter school. ,morgan_status.pdf,morgan_repurposing.pdf,Howard Brookins Jr.,,,,,41.7414207,-87.64028153,morgan 2
+739 N Ada St,Near North,West Town,sold,Will become apartments. Use restriction: All or part of building must be used for mixed-use residential and commercial/retail development. The exterior façade and building structure must be maintained to preserve the building's historic character.,nearnorth_status.pdf,nearnorth_repurposing.pdf,Walter Burnett,7/22/2015,Svigos Asset Management,"$5,100,050",,41.8951289,-87.66128832,near north 2
+221 E 49th St,Overton,Grand Boulevard,sold,"Slated for use as offices, business incubation, youth programs. Use restriction: All or part of building must be used for youth/adult recreational, educational, counseling and mentoring programs; job-training programs; housing; retail; or manufacturting/tech space. Cannot be used to sell/make liquor or as K-12 public/charter school. ",overton_status.pdf,overton_repurposing.pdf,Pat Dowell,7/22/2015,Washington Park Development Group,"$325,000",,41.80558257,-87.62094879,overton 2
+12450 S State St,Owens,West Pullman,repurposed,Reused by Chicago Public Schools as a school for preschool to 3rd grade by Jesse Owens Community Academy (formerly Gompers).,owens_status.pdf,owens_repurposing.pdf,Anthony Beale,,,,,41.6682904,-87.62241035,owens 2
+2221 S Lawndale Ave,Paderewski,South Lawndale,for sale,Use restriction: All or part of building must be used for child care or Head Start programming; an alternative high school; family support and social services; community meeting space; or nonprofit offices.,paderewski_status.pdf,paderewski_repurposing.pdf,Ricardo Munoz,,,,,41.85100287,-87.71732445,paderewski 2
+245 W 51st St,Parkman,Fuller Park,for sale,"Use restriction: All or part of building must be used for youth/adult recreational, educational, counseling, and mentoring programs; career, trade and business training program; housing; retail; vision clinic; or manufacturing/tech space. Cannot be used to sell/make liquor or as a K-12 public/charter school.",parkman_status.pdf,parkman_repurposing.pdf,Pat Dowell,,,,"Minimum bid is $365,000.",41.80171768,-87.63285322,parkman 3
+1444 W Augusta Blvd,Peabody,West Town,sold,"Main building will become apartments. Annex is used by Rowe Middle Charter School. Use restriction: All or part of building must be used for after-school programs, workforce development, job training, child care/Head Start programs, youth programs, family support services or community meeting space.",peabody,peabody_repurposing.pdf,Brian Hopkins,10/22/2014,Svigos Asset Management,"$3,501,000",,41.89985353,-87.66393278,peabody 2
+3113 S Rhodes Ave,Pershing,Douglas,for sale,Use restriction: Cannot be used as a K-12 charter school. ,pershing_status.pdf,pershing_repurposing.pdf,Sophia King,,,,,41.83837169,-87.61340748,pershing 2
+1852 S Albany Ave,Pope,North Lawndale,repurposed,Reused by Chicago Housing Authority. Will become administrative offices and residential housing.,pope_status.pdf,pope_repurposing.pdf,Michael Scott,,,,,41.85594125,-87.70294107,pope 2
+6059 S Wabash Ave,Ross,Washington Park,for sale,Use restriction: Cannot be used as a K-12 charter school. ,ross_status.pdf,ross_repurposing.pdf,Willie Cochran,,,,,41.78448604,-87.6237288,ross 2
+11725 S Perry Ave,Songhai,West Pullman,for sale,"Use restriction: All or part of building must be used for youth/adult services; job training; retail; veteran/senior housing; tech space; storage; or light manufacturing. Cannot be used to sell/make liquor, firearms, drugs or hazardous substances. Cannot be used as K-12 school or to store/recycle waste.",songhai_status.pdf,songhai_repurposing.pdf,Carrie Austin,,,,"Minimum bid is $380,000.",41.68097156,-87.62511708,songhai 2
+4525 N Kenmore Ave,Stewart,Uptown,sold,Will become luxury apartments and possibly retail. Use restriction: Must be used as mixed-use development that incorporates residential units; retail/restaurant space; community plaza or town square; and community programs. Buyer must preserve building's historic character.,stewart_status.pdf,stewart_repurposing.pdf,James Cappleman,10/28/2015,Morningside Equities Group,"$5,112,000",,41.96500309,-87.65609546,stewart 2
+5200 N Ashland Ave,Trumbull,Edgewater,sold,"Slated to become condos and a theater, but after a theater company pulled out of deal in the fall of 2016, development has stalled. Use restriction: Must be used for mixed-use development that incorporates up to 49 residential units and a community theater. Buyer must preserve building's historic character.",trumbull_status.pdf,trumbull_repurposing.pdf,Pat O'Connor,9/29/2015,Svigos Asset Management,"$5,250,000",,41.97618537,-87.66970435,trumbull 1
+410 N Monticello Ave,"Ward, Laura S.",Humboldt Park,for sale,"Use restriction: All or part of building must be used for affordable/veterans housing; business live-work units; early childhood education/programs; senior citizen services; workforce development services, job readiness/employment/vocational training; or small business incubation. Cannot be used as any kind of K-12 school. ",ward_status.pdf,ward_repurposing.pdf,Walter Burnett,,,,,41.88983044,-87.71740163,ward 2
+6950 S Sangamon St,Wentworth,Englewood,for sale,Use restriction: Cannot be used as a K-12 charter school. ,wentworth_status.pdf,wentworth_repurposing.pdf,Roderick Sawyer,,,,,41.76765354,-87.64820843,wentworth 1
+11941 S Parnell Ave,West Pullman,West Pullman,for sale,"Use restriction: All or part of building must be used for youth/adult services; job training; retail, community/tech space; offices; restaurant; storage; light manufacturing; or veteran/senior housing. Cannot be used to sell/make liquor, firearms, drugs or hazardous substances. Cannot be used as K-12 school or to store/recycle waste. ",westpullman_status.pdf,westpullman_repurposing.pdf,Carrie Austin,,,,,41.67689685,-87.63577072,west pullman 2
+6206 S Racine Ave,Woods,West Englewood,for sale,Use restriction: Cannot be used as a K-12 charter school. ,woods_status.pdf,woods_repurposing.pdf,Toni Foulkes,,,,,41.78133513,-87.65463754,woods 1
+7025 S Princeton Ave,Yale,Greater Grand Crossing,for sale,Use restriction: Cannot be used as a K-12 charter school. , yale_status.pdf,yale_repurposing.pdf,Roderick Sawyer,,,,,41.76608577,-87.63214283,yale 3
